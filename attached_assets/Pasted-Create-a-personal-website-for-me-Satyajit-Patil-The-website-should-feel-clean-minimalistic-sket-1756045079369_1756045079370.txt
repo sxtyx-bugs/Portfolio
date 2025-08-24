@@ -1,0 +1,75 @@
+Create a personal website for me (Satyajit Patil). The website should feel clean, minimalistic, sketch-artistic, and entirely in black & white (no colors). Think of it as a modern portfolio that looks like hand-drawn art, with simple lines, light shadows, and a notebook/sketch vibe.
+
+Structure & Sections:
+
+Homepage (Introduction)
+
+A large handwritten/sketch-style headline: “Hi, I’m Satyajit.”
+
+A small sketch-style portrait placeholder or outline (black & white).
+
+A one-line tagline about me: “Dreamer. Builder. Achiever.”
+
+Minimal animated doodles (arrows, stars, underline effects).
+
+About Me
+
+A short description of who I am.
+
+Mention my interests in AI, technology, OSINT, geolocation, building apps, and creating unique projects.
+
+Add a timeline sketch of my journey (like milestones in doodle format).
+
+Achievements
+
+A list of awards and accomplishments in a sketchy notebook style (bullet points with doodles like trophies, stars, or medals).
+
+Example placeholders:
+
+“Won academic awards”
+
+“Built AI-powered apps like LensAI, Inforvi”
+
+“Created unique projects like ORLON.OG (geolocation-based site)”
+
+“Top scores in Computer Science and JEE prep dedication”
+
+“Fluent in Python, web building, AI experiments”
+
+Hobbies & Interests
+
+Presented in a grid or doodle icons format.
+
+Include: Coding, exploring AI, OSINT/geolocation, writing creative notes, learning Japanese, traveling, creating faceless brands, and building projects.
+
+Gallery / Showcase
+
+A section to display screenshots/sketch cards of my projects like LensAI, Inforvi, ORLON.OG, Badlapur Bites, etc.
+
+Each project card should have a sketch border with title + small description.
+
+Quotes & Personal Touch
+
+A section with my personal mottos or quotes in handwriting font.
+
+Example: “Willing to do anything to become the best in AI programming.”
+
+Example: “Together and forever with my goals.”
+
+Contact / Links
+
+Simple icons (black & white hand-drawn style) for Instagram, GitHub, LinkedIn, Notion.
+
+A sketch of an envelope for email.
+
+Design Style:
+
+Black & White only.
+
+Use sketch/doodle style fonts, handwritten headlines, thin lines.
+
+Minimal, lots of white space.
+
+Soft hover effects (underline sketch when hovered).
+
+Feels like a personal notebook turned into a digital site.
