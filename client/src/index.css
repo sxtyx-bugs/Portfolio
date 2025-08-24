@@ -289,3 +289,427 @@ html {
   backdrop-filter: blur(8px);
   background: rgba(255, 255, 255, 0.9);
 }
+
+/* Audio player sketch styling */
+.audio-player-progress {
+  position: relative;
+  height: 8px;
+  background: #e5e5e5;
+  border: 1px solid #999;
+  transform: rotate(-0.3deg);
+  overflow: hidden;
+}
+
+.audio-player-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 33%;
+  background: linear-gradient(90deg, #333 0%, #666 100%);
+  border-right: 1px solid #333;
+  transform: skew(-2deg);
+}
+
+/* Upload area hover effects */
+.upload-area {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  background: #f5f5f5;
+  transform: scale(1.02);
+}
+
+/* Horizontal scroll styling for medals gallery */
+.medals-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f1f1f1;
+}
+
+.medals-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.medals-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0;
+}
+
+.medals-scroll::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 0;
+  border: 1px solid #666;
+}
+
+.medals-scroll::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Creative work icon animations */
+.creative-icon {
+  transition: all 0.3s ease;
+}
+
+.creative-icon:hover {
+  transform: rotate(5deg) scale(1.1);
+}
+
+/* Audio player button styling */
+.audio-btn {
+  transition: all 0.2s ease;
+}
+
+.audio-btn:hover {
+  transform: rotate(-2deg) scale(1.05);
+  background: #f0f0f0;
+}
+
+.audio-btn:active {
+  transform: rotate(2deg) scale(0.95);
+}
+
+/* Medal card hover effects */
+.medal-card {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.medal-card:hover {
+  transform: translateY(-5px) rotate(2deg);
+}
+
+.medal-card:hover::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 10px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+/* Cooking showcase plate styling */
+.cooking-plate {
+  position: relative;
+}
+
+.cooking-plate::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  transform: rotate(1deg);
+  z-index: -1;
+}
+
+/* Certification badge styling */
+.cert-badge {
+  position: relative;
+}
+
+.cert-badge::after {
+  content: '✓';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: #333;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transform: rotate(15deg);
+}
+
+/* Fade-in section animations */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-section.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Timeline styling */
+.timeline-line {
+  background: linear-gradient(to bottom, transparent 0%, #333 25%, #333 75%, transparent 100%);
+  background-size: 1px 20px;
+  background-repeat: repeat-y;
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-left {
+  padding-right: 3rem;
+}
+
+.timeline-right {
+  padding-left: 3rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background: #333;
+  border: 3px solid white;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.timeline-left::before {
+  right: -8px;
+}
+
+.timeline-right::before {
+  left: -8px;
+}
+
+/* Achievement icon animations */
+.achievement-icon {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.timeline-item:hover .achievement-icon {
+  transform: scale(1.3) rotate(10deg);
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Hobby cycling animation */
+.hobby-cycling {
+  animation: hobbyFadeIn 0.5s ease-in-out;
+}
+
+@keyframes hobbyFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Animated text box */
+.animated-text-box {
+  animation: textBoxSlideIn 1s ease-out;
+}
+
+@keyframes textBoxSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(-0.5deg);
+  }
+}
+
+/* Project card hover effects */
+.project-card {
+  transition: all 0.4s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+}
+
+.project-card:hover .sketch-card {
+  box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
+  transform: rotate(1deg);
+}
+
+.project-card:hover .sketch-card::before {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+/* Form styling improvements */
+input.sketch-border, textarea.sketch-border {
+  position: relative;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+input.sketch-border:focus, textarea.sketch-border:focus {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.1);
+}
+
+/* Parallax elements */
+.parallax {
+  will-change: transform;
+}
+
+/* Typewriter cursor */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink 1s infinite;
+}
+
+/* Enhanced sketch animations */
+@keyframes sketchAppear {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.sketch-appear {
+  stroke-dasharray: 1000;
+  animation: sketchAppear 2s ease-in-out forwards;
+}
+
+/* Music player enhancements */
+.music-player {
+  position: relative;
+}
+
+.music-player::after {
+  content: '♪ ♫ ♪';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 12px;
+  opacity: 0.3;
+  animation: musicNotes 3s ease-in-out infinite;
+}
+
+@keyframes musicNotes {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-5px) rotate(5deg); }
+  66% { transform: translateY(-2px) rotate(-3deg); }
+}
+
+/* Contact form animations */
+.contact-form-field {
+  position: relative;
+}
+
+.contact-form-field::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #333;
+  transition: width 0.3s ease;
+}
+
+.contact-form-field:focus-within::after {
+  width: 100%;
+}
+
+/* Social icon improvements */
+.social-icon {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.social-icon:hover {
+  transform: translateY(-5px) rotate(5deg);
+}
+
+.social-icon:hover::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 5px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .timeline-left, .timeline-right {
+    padding-left: 2rem;
+    padding-right: 1rem;
+  }
+  
+  .timeline-left::before, .timeline-right::before {
+    left: -8px;
+    right: auto;
+  }
+  
+  .font-handwritten {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+  
+  .typewriter-container {
+    height: auto;
+    min-height: 4rem;
+  }
+}
+
+/* Loading animation for sections */
+.section-loading {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.section-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced doodle animations */
+.doodle-element {
+  animation: doodleFloat 4s ease-in-out infinite;
+}
+
+@keyframes doodleFloat {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% { 
+    transform: translateY(-10px) rotate(2deg);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: translateY(-15px) rotate(-1deg);
+    opacity: 0.4;
+  }
+  75% { 
+    transform: translateY(-5px) rotate(1deg);
+    opacity: 0.6;
+  }
+}

@@ -1,80 +1,141 @@
-import { useEffect } from "react";
-import { Github, Instagram, Linkedin, Book, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send } from "lucide-react";
 
 export default function Home() {
+  const [currentHobby, setCurrentHobby] = useState(0);
+  const [typewriterText, setTypewriterText] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const hobbies = [
+    "Coding 💻",
+    "OSINT Enthusiast 🕵️",
+    "AI Innovator 🤖", 
+    "Geolocation Expert 🌍",
+    "Learning Japanese 🇯🇵",
+    "Music Lover 🎵",
+    "Building Apps 📱"
+  ];
+
+  const typewriterTexts = [
+    "Coder",
+    "OSINT Enthusiast", 
+    "AI Innovator",
+    "Dream Chaser"
+  ];
+
   useEffect(() => {
-    // Smooth scrolling for navigation links
-    const handleNavClick = (e: Event) => {
-      const target = e.target as HTMLAnchorElement;
-      if (target.getAttribute('href')?.startsWith('#')) {
-        e.preventDefault();
-        const targetElement = document.querySelector(target.getAttribute('href')!);
-        if (targetElement) {
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
+    // Typewriter animation
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+
+    const typeWriter = () => {
+      const currentText = typewriterTexts[currentTextIndex];
+      
+      if (isDeleting) {
+        setTypewriterText(currentText.substring(0, currentCharIndex - 1));
+        currentCharIndex--;
+      } else {
+        setTypewriterText(currentText.substring(0, currentCharIndex + 1));
+        currentCharIndex++;
       }
+
+      if (!isDeleting && currentCharIndex === currentText.length) {
+        setTimeout(() => isDeleting = true, 2000);
+      } else if (isDeleting && currentCharIndex === 0) {
+        isDeleting = false;
+        currentTextIndex = (currentTextIndex + 1) % typewriterTexts.length;
+      }
+
+      setTimeout(typeWriter, isDeleting ? 50 : 100);
     };
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', handleNavClick);
-    });
+    typeWriter();
 
-    // Add random floating animation delays
-    const floatingElements = document.querySelectorAll('.animate-float');
-    floatingElements.forEach((element, index) => {
-      (element as HTMLElement).style.animationDelay = `${index * 0.5}s`;
-    });
+    // Cycling hobbies animation
+    const hobbyInterval = setInterval(() => {
+      setCurrentHobby((prev) => (prev + 1) % hobbies.length);
+    }, 2500);
 
-    // Parallax effect for hero doodles
+    // Scroll-based animations
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
-      const parallaxElements = document.querySelectorAll('#home .absolute');
+      const rate = scrolled * -0.5;
       
+      const parallaxElements = document.querySelectorAll('.parallax');
       parallaxElements.forEach((element, index) => {
-        const speed = 0.5 + (index * 0.1);
+        const speed = 0.3 + (index * 0.1);
         (element as HTMLElement).style.transform = `translateY(${scrolled * speed}px)`;
       });
     };
 
-    window.addEventListener('scroll', handleScroll);
-
-    // Intersection Observer for animation triggers
+    // Intersection Observer for fade-in animations
     const observerOptions = {
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      rootMargin: '0px 0px -100px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          (entry.target as HTMLElement).style.opacity = '1';
-          (entry.target as HTMLElement).style.transform = 'translateY(0)';
+          entry.target.classList.add('animate-in');
         }
       });
     }, observerOptions);
 
-    // Observe all sketch cards for fade-in animation
-    document.querySelectorAll('.sketch-card').forEach(card => {
-      (card as HTMLElement).style.opacity = '0';
-      (card as HTMLElement).style.transform = 'translateY(20px)';
-      (card as HTMLElement).style.transition = 'all 0.6s ease';
-      observer.observe(card);
+    // Observe all animated sections
+    document.querySelectorAll('.fade-in-section').forEach(section => {
+      observer.observe(section);
     });
 
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.removeEventListener('click', handleNavClick);
-      });
+      clearInterval(hobbyInterval);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
   }, []);
 
+  const achievements = [
+    { title: "Academic Excellence", icon: "🏆", detail: "Top scores in Computer Science" },
+    { title: "AI Innovation", icon: "🤖", detail: "Built LensAI & Inforvi platforms" },
+    { title: "OSINT Mastery", icon: "🌍", detail: "Created ORLON.OG geolocation site" },
+    { title: "Taekwondo Champion", icon: "🥋", detail: "Multiple gold medals" },
+    { title: "Certifications", icon: "📜", detail: "Oracle AI & Microsoft Azure" }
+  ];
+
+  const projects = [
+    {
+      title: "LensAI",
+      description: "AI-powered image analysis platform with advanced ML capabilities",
+      tech: "Python • TensorFlow • OpenCV"
+    },
+    {
+      title: "Inforvi", 
+      description: "Information visualization tool transforming data into insights",
+      tech: "React • D3.js • Node.js"
+    },
+    {
+      title: "ORLON.OG",
+      description: "Geolocation platform combining OSINT with interactive mapping",
+      tech: "JavaScript • Leaflet • APIs"
+    }
+  ];
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log("Form submitted:", contactForm);
+  };
+
   return (
-    <div className="bg-white text-gray-900 font-clean">
+    <div className="bg-white text-gray-900 font-clean overflow-x-hidden">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-50 border-b border-gray-200" data-testid="navigation">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -92,331 +153,220 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden" data-testid="hero-section">
+      <section id="home" className="min-h-screen flex items-center justify-center relative" data-testid="hero-section">
         <div className="max-w-4xl mx-auto px-4 text-center relative">
           {/* Floating doodle elements */}
-          <div className="absolute top-10 left-10 text-4xl opacity-30 animate-float" data-testid="doodle-star">⭐</div>
-          <div className="absolute top-20 right-20 text-3xl opacity-40 animate-doodle-bounce" data-testid="doodle-arrow">→</div>
-          <div className="absolute bottom-32 left-20 text-2xl opacity-35 animate-float" style={{animationDelay: '1s'}} data-testid="doodle-sparkle">✨</div>
+          <div className="absolute top-10 left-10 text-4xl opacity-20 parallax" data-testid="doodle-star">⭐</div>
+          <div className="absolute top-20 right-20 text-3xl opacity-25 parallax" data-testid="doodle-arrow">→</div>
+          <div className="absolute bottom-32 left-20 text-2xl opacity-30 parallax" data-testid="doodle-sparkle">✨</div>
           
           {/* Main headline */}
-          <h1 className="font-handwritten text-6xl md:text-8xl font-bold mb-8 relative" data-testid="main-headline">
+          <h1 className="font-handwritten text-7xl md:text-9xl font-bold mb-8 relative" data-testid="main-headline">
             Hi, I'm 
             <span className="relative inline-block">
               Satyajit
-              <svg className="absolute -bottom-4 left-0 w-full h-6" viewBox="0 0 300 20" data-testid="headline-underline">
-                <path d="M10,15 Q50,5 100,12 T200,10 T290,15" stroke="#333" strokeWidth="3" fill="none" 
-                      strokeDasharray="5,5" className="animate-sketch-draw"/>
+              <svg className="absolute -bottom-6 left-0 w-full h-8" viewBox="0 0 400 20" data-testid="headline-underline">
+                <path d="M10,15 Q100,5 200,12 T380,15" stroke="#333" strokeWidth="4" fill="none" 
+                      strokeDasharray="8,4" className="animate-sketch-draw"/>
               </svg>
             </span>
-            <div className="absolute -top-8 -right-8 text-3xl animate-doodle-bounce" data-testid="wave-emoji">✌️</div>
           </h1>
           
-          {/* Portrait placeholder with sketch border */}
-          <div className="sketch-border w-48 h-48 mx-auto mb-8 flex items-center justify-center bg-gray-50" data-testid="portrait-placeholder">
-            {/* Simple sketch-style portrait outline */}
-            <svg width="120" height="120" viewBox="0 0 120 120" className="opacity-60" data-testid="portrait-svg">
-              <circle cx="60" cy="40" r="25" stroke="#333" strokeWidth="2" fill="none"/>
-              <path d="M30,80 Q40,70 60,75 T90,80 Q90,100 60,105 Q30,100 30,80" stroke="#333" strokeWidth="2" fill="none"/>
-              <circle cx="52" cy="38" r="2" fill="#333"/>
-              <circle cx="68" cy="38" r="2" fill="#333"/>
-              <path d="M55,48 Q60,52 65,48" stroke="#333" strokeWidth="2" fill="none"/>
-            </svg>
+          {/* Typewriter animation */}
+          <div className="h-16 mb-12" data-testid="typewriter-container">
+            <p className="font-sketch text-3xl md:text-4xl text-gray-700">
+              {typewriterText}
+              <span className="animate-pulse">|</span>
+            </p>
           </div>
           
-          {/* Tagline */}
-          <p className="font-sketch text-2xl md:text-3xl text-gray-700 mb-12" data-testid="tagline">
-            Dreamer. Builder. Achiever.
-          </p>
-          
-          {/* Animated arrow pointing down */}
-          <div className="animate-bounce" data-testid="scroll-indicator">
+          {/* Scroll indicator */}
+          <div className="animate-bounce mt-16" data-testid="scroll-indicator">
             <svg width="40" height="40" viewBox="0 0 40 40" className="mx-auto opacity-60">
               <path d="M20,5 Q18,15 20,25 Q22,15 20,5" stroke="#333" strokeWidth="2" fill="none"/>
               <path d="M15,20 Q20,28 25,20" stroke="#333" strokeWidth="2" fill="none"/>
             </svg>
           </div>
         </div>
+
+        {/* Hand-drawn divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg width="100%" height="40" viewBox="0 0 1200 40" className="opacity-30">
+            <path d="M0,20 Q300,10 600,25 T1200,20" stroke="#333" strokeWidth="2" fill="none" strokeDasharray="5,5"/>
+          </svg>
+        </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50" data-testid="about-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-handwritten text-5xl font-bold mb-4 relative inline-block" data-testid="about-title">
-              About Me
-              <div className="absolute -top-6 -right-12 text-2xl animate-float" data-testid="about-icon">📝</div>
-            </h2>
-            <div className="w-24 h-1 bg-gray-400 mx-auto transform rotate-1"></div>
-          </div>
+      <section id="about" className="py-32 bg-gray-50 fade-in-section" data-testid="about-section">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="font-handwritten text-6xl font-bold mb-16 relative" data-testid="about-title">
+            About Me
+            <div className="absolute -top-8 -right-16 text-3xl animate-float">📝</div>
+          </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Description */}
-            <div className="sketch-card p-8" data-testid="about-description">
-              <p className="font-clean text-lg leading-relaxed mb-6">
-                I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
-              </p>
-              <p className="font-clean text-lg leading-relaxed">
-                When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or crafting faceless brands. I believe in the power of continuous learning and the magic that happens when curiosity meets dedication.
-              </p>
-            </div>
+          <div className="sketch-card p-12 text-left animated-text-box" data-testid="about-content">
+            <p className="font-clean text-xl leading-relaxed mb-8">
+              I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
+            </p>
+            <p className="font-clean text-xl leading-relaxed mb-8">
+              My goals are ambitious but clear: achieve a perfect 10 GPA, study in Japan to immerse myself in cutting-edge technology culture, and become the absolute best in AI programming. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
+            </p>
+            <p className="font-clean text-xl leading-relaxed">
+              When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or exploring the endless possibilities that technology offers. I believe in the power of continuous learning and the magic that happens when curiosity meets dedication.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Achievements Timeline */}
+      <section id="achievements" className="py-32 fade-in-section" data-testid="achievements-section">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="achievements-title">
+            Achievements
+            <div className="absolute -top-4 -right-12 text-4xl animate-doodle-bounce">🏆</div>
+          </h2>
+          
+          <div className="relative" data-testid="timeline">
+            {/* Timeline line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300 timeline-line"></div>
             
-            {/* Timeline */}
-            <div className="sketch-card p-8" data-testid="timeline">
-              <h3 className="font-handwritten text-2xl font-bold mb-6">My Journey</h3>
-              <div className="space-y-6">
-                <div className="timeline-item" data-testid="timeline-academic">
-                  <h4 className="font-clean font-semibold">Academic Excellence</h4>
-                  <p className="font-clean text-sm text-gray-600">Top scores in Computer Science</p>
-                </div>
-                <div className="timeline-item" data-testid="timeline-ai">
-                  <h4 className="font-clean font-semibold">AI Exploration</h4>
-                  <p className="font-clean text-sm text-gray-600">Built LensAI and Inforvi</p>
-                </div>
-                <div className="timeline-item" data-testid="timeline-osint">
-                  <h4 className="font-clean font-semibold">OSINT Mastery</h4>
-                  <p className="font-clean text-sm text-gray-600">Created ORLON.OG</p>
-                </div>
-                <div className="timeline-item" data-testid="timeline-entrepreneur">
-                  <h4 className="font-clean font-semibold">Entrepreneurial Spirit</h4>
-                  <p className="font-clean text-sm text-gray-600">Launched Badlapur Bites</p>
+            {achievements.map((achievement, index) => (
+              <div key={index} className={`flex items-center mb-16 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`} data-testid={`achievement-${index}`}>
+                <div className={`timeline-item ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'} max-w-md`}>
+                  <div className="sketch-card p-6 hover:scale-105 transition-all duration-300">
+                    <div className="flex items-center mb-4">
+                      <div className="text-3xl mr-4 achievement-icon">{achievement.icon}</div>
+                      <h3 className="font-handwritten text-2xl font-bold">{achievement.title}</h3>
+                    </div>
+                    <p className="font-clean text-gray-600">{achievement.detail}</p>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hobbies & Passions */}
+      <section id="hobbies" className="py-32 bg-gray-50 fade-in-section" data-testid="hobbies-section">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="font-handwritten text-6xl font-bold mb-16" data-testid="hobbies-title">
+            Hobbies & Passions
+          </h2>
+          
+          {/* Cycling hobbies animation */}
+          <div className="mb-16" data-testid="cycling-hobbies">
+            <div className="sketch-card p-8 inline-block">
+              <p className="font-sketch text-3xl transition-all duration-500 hobby-cycling">
+                {hobbies[currentHobby]}
+              </p>
+            </div>
+          </div>
+          
+          {/* Music section with Zaalima */}
+          <div className="sketch-card p-8 max-w-md mx-auto" data-testid="music-section">
+            <h3 className="font-handwritten text-2xl font-bold mb-4">Now Playing</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="font-sketch text-lg">Zaalima (sped up)</p>
+                <p className="font-clean text-sm text-gray-600">Current favorite</p>
+              </div>
+              <button 
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="sketch-border p-3 hover:bg-gray-100 transition-all duration-200"
+                data-testid="music-play-btn"
+              >
+                {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+              </button>
+            </div>
+            <div className="w-full bg-gray-200 h-2 sketch-border">
+              <div className={`h-full bg-gray-800 transition-all duration-300 ${isPlaying ? 'w-1/3' : 'w-0'}`}></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Achievements Section */}
-      <section id="achievements" className="py-20" data-testid="achievements-section">
+      {/* Projects */}
+      <section id="projects" className="py-32 fade-in-section" data-testid="projects-section">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-handwritten text-5xl font-bold mb-4 relative inline-block" data-testid="achievements-title">
-              Achievements
-              <div className="absolute -top-4 -right-8 text-3xl animate-doodle-bounce" data-testid="trophy-icon">🏆</div>
-            </h2>
-          </div>
+          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="projects-title">
+            Projects
+            <div className="absolute -top-6 -right-16 text-3xl animate-float">🚀</div>
+          </h2>
           
-          <div className="notebook-bg p-8 sketch-border" data-testid="achievements-content">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Academic Achievements */}
-              <div data-testid="academic-achievements">
-                <h3 className="font-sketch text-2xl font-bold mb-4 flex items-center">
-                  Academic Excellence
-                  <span className="ml-2 text-xl">📚</span>
-                </h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start space-x-3" data-testid="achievement-awards">
-                    <span className="text-xl">⭐</span>
-                    <span className="font-clean">Won multiple academic awards</span>
-                  </li>
-                  <li className="flex items-start space-x-3" data-testid="achievement-scores">
-                    <span className="text-xl">📊</span>
-                    <span className="font-clean">Top scores in Computer Science</span>
-                  </li>
-                  <li className="flex items-start space-x-3" data-testid="achievement-jee">
-                    <span className="text-xl">🎯</span>
-                    <span className="font-clean">JEE preparation dedication</span>
-                  </li>
-                </ul>
+          <div className="grid md:grid-cols-3 gap-8" data-testid="projects-grid">
+            {projects.map((project, index) => (
+              <div key={index} className="project-card" data-testid={`project-${index}`}>
+                <div className="sketch-card p-8 h-full hover:scale-105 transition-all duration-300">
+                  <h3 className="font-handwritten text-3xl font-bold mb-4">{project.title}</h3>
+                  <p className="font-clean text-gray-600 mb-6 leading-relaxed">{project.description}</p>
+                  <div className="mt-auto">
+                    <p className="font-sketch text-sm text-gray-500">{project.tech}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form */}
+      <section id="contact" className="py-32 bg-gray-50 fade-in-section" data-testid="contact-section">
+        <div className="max-w-2xl mx-auto px-4">
+          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="contact-title">
+            Let's Connect
+            <div className="absolute -top-4 -right-16 text-3xl animate-float">📮</div>
+          </h2>
+          
+          <form onSubmit={handleFormSubmit} className="sketch-card p-12" data-testid="contact-form">
+            <div className="space-y-8">
+              <div>
+                <label className="font-handwritten text-xl block mb-3">Name</label>
+                <input
+                  type="text"
+                  value={contactForm.name}
+                  onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
+                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  data-testid="contact-name"
+                />
               </div>
               
-              {/* Technical Achievements */}
-              <div data-testid="technical-achievements">
-                <h3 className="font-sketch text-2xl font-bold mb-4 flex items-center">
-                  Technical Mastery
-                  <span className="ml-2 text-xl">💻</span>
-                </h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start space-x-3" data-testid="achievement-ai-apps">
-                    <span className="text-xl">🤖</span>
-                    <span className="font-clean">Built AI-powered apps: LensAI, Inforvi</span>
-                  </li>
-                  <li className="flex items-start space-x-3" data-testid="achievement-orlon">
-                    <span className="text-xl">🌍</span>
-                    <span className="font-clean">Created ORLON.OG (geolocation-based)</span>
-                  </li>
-                  <li className="flex items-start space-x-3" data-testid="achievement-python">
-                    <span className="text-xl">🐍</span>
-                    <span className="font-clean">Fluent in Python & web development</span>
-                  </li>
-                  <li className="flex items-start space-x-3" data-testid="achievement-experiments">
-                    <span className="text-xl">🔬</span>
-                    <span className="font-clean">AI experiments and research</span>
-                  </li>
-                </ul>
+              <div>
+                <label className="font-handwritten text-xl block mb-3">Email</label>
+                <input
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
+                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  data-testid="contact-email"
+                />
               </div>
+              
+              <div>
+                <label className="font-handwritten text-xl block mb-3">Message</label>
+                <textarea
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
+                  rows={5}
+                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+                  data-testid="contact-message"
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full sketch-border p-4 bg-gray-900 text-white font-handwritten text-xl hover:bg-gray-700 transition-all duration-300 flex items-center justify-center space-x-3"
+                data-testid="contact-submit"
+              >
+                <span>Send Message</span>
+                <Send className="w-5 h-5" />
+              </button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Hobbies & Interests Section */}
-      <section id="hobbies" className="py-20 bg-gray-50" data-testid="hobbies-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-handwritten text-5xl font-bold mb-4" data-testid="hobbies-title">
-              Hobbies & Interests
-            </h2>
-          </div>
+          </form>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6" data-testid="hobbies-grid">
-            {/* Hobby items with doodle icons */}
-            <div className="sketch-card p-6 text-center" data-testid="hobby-coding">
-              <div className="text-4xl mb-3">💻</div>
-              <h3 className="font-sketch text-lg font-bold">Coding</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-ai">
-              <div className="text-4xl mb-3">🤖</div>
-              <h3 className="font-sketch text-lg font-bold">AI Research</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-osint">
-              <div className="text-4xl mb-3">🕵️</div>
-              <h3 className="font-sketch text-lg font-bold">OSINT</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-geolocation">
-              <div className="text-4xl mb-3">🌍</div>
-              <h3 className="font-sketch text-lg font-bold">Geolocation</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-writing">
-              <div className="text-4xl mb-3">📝</div>
-              <h3 className="font-sketch text-lg font-bold">Creative Writing</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-japanese">
-              <div className="text-4xl mb-3">🇯🇵</div>
-              <h3 className="font-sketch text-lg font-bold">Learning Japanese</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-travel">
-              <div className="text-4xl mb-3">✈️</div>
-              <h3 className="font-sketch text-lg font-bold">Traveling</h3>
-            </div>
-            
-            <div className="sketch-card p-6 text-center" data-testid="hobby-brands">
-              <div className="text-4xl mb-3">🏢</div>
-              <h3 className="font-sketch text-lg font-bold">Building Brands</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Gallery */}
-      <section id="projects" className="py-20" data-testid="projects-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-handwritten text-5xl font-bold mb-4 relative inline-block" data-testid="projects-title">
-              Project Showcase
-              <div className="absolute -top-6 -right-16 text-2xl animate-float" data-testid="rocket-icon">🚀</div>
-            </h2>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="projects-grid">
-            {/* Project Cards */}
-            <div className="sketch-card p-6" data-testid="project-lensai">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">LensAI Screenshot</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">LensAI</h3>
-              <p className="font-clean text-sm text-gray-600">AI-powered image analysis and recognition platform with advanced machine learning capabilities.</p>
-            </div>
-            
-            <div className="sketch-card p-6" data-testid="project-inforvi">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">Inforvi Preview</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">Inforvi</h3>
-              <p className="font-clean text-sm text-gray-600">Information visualization tool that transforms complex data into beautiful, interactive insights.</p>
-            </div>
-            
-            <div className="sketch-card p-6" data-testid="project-orlon">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">ORLON.OG Demo</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">ORLON.OG</h3>
-              <p className="font-clean text-sm text-gray-600">Geolocation-based platform combining OSINT techniques with interactive mapping technologies.</p>
-            </div>
-            
-            <div className="sketch-card p-6" data-testid="project-badlapur">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">Badlapur Bites</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">Badlapur Bites</h3>
-              <p className="font-clean text-sm text-gray-600">Local food discovery platform connecting food lovers with authentic regional cuisines.</p>
-            </div>
-            
-            <div className="sketch-card p-6" data-testid="project-experiments">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">AI Experiments</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">AI Experiments</h3>
-              <p className="font-clean text-sm text-gray-600">Collection of experimental AI projects exploring cutting-edge machine learning techniques.</p>
-            </div>
-            
-            <div className="sketch-card p-6" data-testid="project-coming-soon">
-              <div className="sketch-border h-40 mb-4 bg-gray-100 flex items-center justify-center">
-                <span className="font-sketch text-lg text-gray-500">Coming Soon</span>
-              </div>
-              <h3 className="font-handwritten text-2xl font-bold mb-2">Next Project</h3>
-              <p className="font-clean text-sm text-gray-600">Always working on something new and exciting. Stay tuned for the next innovation!</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quotes Section */}
-      <section id="quotes" className="py-20 bg-gray-50" data-testid="quotes-section">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-handwritten text-5xl font-bold mb-16" data-testid="quotes-title">Personal Mottos</h2>
-          
-          <div className="space-y-12">
-            <div className="sketch-card p-8 transform -rotate-1" data-testid="quote-1">
-              <blockquote className="font-sketch text-2xl md:text-3xl text-gray-700 italic">
-                "Willing to do anything to become the best in AI programming."
-              </blockquote>
-              <div className="mt-4 flex justify-center">
-                <svg width="100" height="20" viewBox="0 0 100 20">
-                  <path d="M10,15 Q30,5 50,12 T90,10" stroke="#666" strokeWidth="2" fill="none" strokeDasharray="3,3"/>
-                </svg>
-              </div>
-            </div>
-            
-            <div className="sketch-card p-8 transform rotate-1" data-testid="quote-2">
-              <blockquote className="font-sketch text-2xl md:text-3xl text-gray-700 italic">
-                "Together and forever with my goals."
-              </blockquote>
-              <div className="mt-4 flex justify-center">
-                <svg width="100" height="20" viewBox="0 0 100 20">
-                  <path d="M10,10 Q30,18 50,8 T90,15" stroke="#666" strokeWidth="2" fill="none" strokeDasharray="3,3"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20" data-testid="contact-section">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-handwritten text-5xl font-bold mb-4 relative inline-block" data-testid="contact-title">
-            Let's Connect
-            <div className="absolute -top-4 -right-12 text-3xl animate-float" data-testid="mail-icon">📮</div>
-          </h2>
-          <p className="font-clean text-lg text-gray-600 mb-12" data-testid="contact-description">
-            Always excited to connect with fellow dreamers, builders, and achievers!
-          </p>
-          
-          {/* Social Media Icons */}
-          <div className="flex justify-center space-x-8 mb-12" data-testid="social-links">
-            <a href="#" className="social-icon" data-testid="link-instagram">
-              <div className="sketch-border w-16 h-16 flex items-center justify-center">
-                <Instagram className="w-6 h-6" />
-              </div>
-            </a>
+          {/* Social Links */}
+          <div className="flex justify-center space-x-8 mt-12" data-testid="social-links">
             <a href="#" className="social-icon" data-testid="link-github">
               <div className="sketch-border w-16 h-16 flex items-center justify-center">
                 <Github className="w-6 h-6" />
@@ -427,22 +377,11 @@ export default function Home() {
                 <Linkedin className="w-6 h-6" />
               </div>
             </a>
-            <a href="#" className="social-icon" data-testid="link-notion">
+            <a href="#" className="social-icon" data-testid="link-instagram">
               <div className="sketch-border w-16 h-16 flex items-center justify-center">
-                <Book className="w-6 h-6" />
+                <Instagram className="w-6 h-6" />
               </div>
             </a>
-          </div>
-          
-          {/* Email */}
-          <div className="sketch-card p-6 inline-block" data-testid="email-contact">
-            <div className="flex items-center space-x-4">
-              <svg width="40" height="40" viewBox="0 0 40 40" className="opacity-60">
-                <rect x="5" y="12" width="30" height="20" stroke="#333" strokeWidth="2" fill="none" rx="2"/>
-                <path d="M8,15 Q20,25 32,15" stroke="#333" strokeWidth="2" fill="none"/>
-              </svg>
-              <span className="font-clean text-lg">satyajit@example.com</span>
-            </div>
           </div>
         </div>
       </section>
@@ -451,11 +390,11 @@ export default function Home() {
       <footer className="py-8 border-t border-gray-200" data-testid="footer">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="font-clean text-sm text-gray-600">
-            © 2024 Satyajit Patil. Handcrafted with passion and a lot of sketches.
+            © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.
           </p>
           <div className="mt-4">
             <svg width="100" height="20" viewBox="0 0 100 20" className="mx-auto opacity-30">
-              <path d="M10,10 Q25,5 40,12 T70,8 T90,15" stroke="#666" strokeWidth="2" fill="none" strokeDasharray="2,3"/>
+              <path d="M10,10 Q30,18 50,8 T90,15" stroke="#333" strokeWidth="2" fill="none" strokeDasharray="3,3"/>
             </svg>
           </div>
         </div>
