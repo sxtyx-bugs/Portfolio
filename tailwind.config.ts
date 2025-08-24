@@ -65,6 +65,8 @@ export default {
       fontFamily: {
         handwritten: ["var(--font-handwritten)"],
         sketch: ["var(--font-sketch)"],
+        artistic: ["var(--font-artistic)"],
+        serif: ["var(--font-serif)"],
         clean: ["var(--font-clean)"],
       },
       animation: {

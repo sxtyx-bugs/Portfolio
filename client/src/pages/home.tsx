@@ -84,6 +84,16 @@ export default function Home() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('animate-in');
+          
+          // Special handling for About section
+          if (entry.target.getAttribute('data-testid') === 'about-section') {
+            const aboutCard = entry.target.querySelector('.about-card-enhanced');
+            if (aboutCard) {
+              setTimeout(() => {
+                aboutCard.classList.add('animate-in');
+              }, 500);
+            }
+          }
         }
       });
     }, observerOptions);
@@ -197,24 +207,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-32 bg-gray-50 fade-in-section" data-testid="about-section">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-handwritten text-6xl font-bold mb-16 relative" data-testid="about-title">
-            About Me
-            <div className="absolute -top-8 -right-16 text-3xl animate-float">📝</div>
-          </h2>
+      {/* About Section - Enhanced */}
+      <section id="about" className="py-32 about-section-enhanced fade-in-section" data-testid="about-section">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="about-title-enhanced text-center" data-testid="about-title">
+              About Me
+            </h2>
+            <div className="absolute top-8 right-8 text-3xl animate-float opacity-30">📝</div>
+          </div>
           
-          <div className="sketch-card p-12 text-left animated-text-box" data-testid="about-content">
-            <p className="font-clean text-xl leading-relaxed mb-8">
-              I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
-            </p>
-            <p className="font-clean text-xl leading-relaxed mb-8">
-              My goals are ambitious but clear: achieve a perfect 10 GPA, study in Japan to immerse myself in cutting-edge technology culture, and become the absolute best in AI programming. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
-            </p>
-            <p className="font-clean text-xl leading-relaxed">
-              When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or exploring the endless possibilities that technology offers. I believe in the power of continuous learning and the magic that happens when curiosity meets dedication.
-            </p>
+          <div className="about-card-enhanced p-12 md:p-16 text-left max-w-4xl mx-auto" data-testid="about-content">
+            <div className="about-paragraph-delay">
+              <p className="about-text-enhanced">
+                I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of <span className="highlight-word">AI and technology</span>. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of <span className="highlight-word">OSINT</span> and geolocation technologies.
+              </p>
+            </div>
+            
+            <div className="about-paragraph-delay">
+              <p className="about-text-enhanced">
+                My goals are ambitious but crystal clear: achieve a perfect <span className="highlight-word">10 GPA</span>, study in <span className="highlight-word">Japan</span> to immerse myself in cutting-edge technology culture, and become the absolute best in <span className="highlight-word">AI programming</span>. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
+              </p>
+            </div>
+            
+            <div className="about-paragraph-delay">
+              <p className="about-text-enhanced">
+                When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or exploring the endless possibilities that technology offers. I believe in the power of continuous learning and the magic that happens when <span className="highlight-word">curiosity</span> meets <span className="highlight-word">dedication</span>.
+              </p>
+            </div>
+            
+            <div className="about-paragraph-delay">
+              <p className="about-text-enhanced italic font-semibold text-gray-700 border-l-4 border-gray-300 pl-6 mt-8">
+                "The future belongs to those who believe in the beauty of their dreams, and I'm building mine one algorithm at a time."
+              </p>
+            </div>
           </div>
         </div>
       </section>
