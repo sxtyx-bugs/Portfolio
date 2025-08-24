@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 10%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 10%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 10%);
+  --primary: hsl(0 0% 10%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(0 0% 90%);
+  --secondary-foreground: hsl(0 0% 10%);
+  --muted: hsl(0 0% 96%);
+  --muted-foreground: hsl(0 0% 40%);
+  --accent: hsl(0 0% 96%);
+  --accent-foreground: hsl(0 0% 10%);
+  --destructive: hsl(0 0% 20%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 80%);
+  --input: hsl(0 0% 96%);
+  --ring: hsl(0 0% 10%);
+  --chart-1: hsl(0 0% 10%);
+  --chart-2: hsl(0 0% 30%);
+  --chart-3: hsl(0 0% 50%);
+  --chart-4: hsl(0 0% 70%);
+  --chart-5: hsl(0 0% 90%);
+  --sidebar: hsl(0 0% 100%);
+  --sidebar-foreground: hsl(0 0% 10%);
+  --sidebar-primary: hsl(0 0% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(0 0% 96%);
+  --sidebar-accent-foreground: hsl(0 0% 10%);
+  --sidebar-border: hsl(0 0% 80%);
+  --sidebar-ring: hsl(0 0% 10%);
+  --font-handwritten: 'Kalam', cursive;
+  --font-sketch: 'Caveat', cursive;
+  --font-clean: 'Inter', sans-serif;
+  --radius: 0rem;
+}
+
+.dark {
+  --background: hsl(0 0% 0%);
+  --foreground: hsl(0 0% 90%);
+  --card: hsl(0 0% 0%);
+  --card-foreground: hsl(0 0% 90%);
+  --popover: hsl(0 0% 0%);
+  --popover-foreground: hsl(0 0% 90%);
+  --primary: hsl(0 0% 90%);
+  --primary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(0 0% 10%);
+  --secondary-foreground: hsl(0 0% 90%);
+  --muted: hsl(0 0% 4%);
+  --muted-foreground: hsl(0 0% 60%);
+  --accent: hsl(0 0% 4%);
+  --accent-foreground: hsl(0 0% 90%);
+  --destructive: hsl(0 0% 80%);
+  --destructive-foreground: hsl(0 0% 0%);
+  --border: hsl(0 0% 20%);
+  --input: hsl(0 0% 4%);
+  --ring: hsl(0 0% 90%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-clean antialiased bg-background text-foreground;
+  }
+}
+
+/* Custom sketch-style animations and effects */
+@keyframes doodle-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes sketch-draw {
+  0% { stroke-dashoffset: 100; opacity: 0.3; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -100; opacity: 0.3; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* Sketch-style borders */
+.sketch-border {
+  border: 2px solid #1a1a1a;
+  border-radius: 0;
+  position: relative;
+  background: white;
+}
+
+.sketch-border::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border: 1px solid #666;
+  border-radius: 0;
+  transform: rotate(-0.5deg);
+  z-index: -1;
+}
+
+/* Hand-drawn underline effect */
+.sketch-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.sketch-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 3px;
+  background: url("data:image/svg+xml,%3csvg width='100' height='10' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5,5 Q25,0 45,5 T85,5' stroke='%23333' stroke-width='2' fill='none'/%3e%3c/svg%3e") repeat-x;
+  background-size: 100px 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sketch-underline:hover::after {
+  opacity: 1;
+}
+
+/* Doodle elements */
+.doodle-star {
+  position: relative;
+}
+
+.doodle-star::before {
+  content: '★';
+  position: absolute;
+  font-size: 1.2rem;
+  color: #666;
+  animation: doodle-bounce 2s ease-in-out infinite;
+}
+
+/* Sketch-style cards */
+.sketch-card {
+  background: white;
+  border: 2px solid #1a1a1a;
+  transform: rotate(-0.5deg);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.sketch-card:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+}
+
+.sketch-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 1px solid #999;
+  transform: rotate(1deg);
+  z-index: -1;
+}
+
+/* Timeline sketch style */
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-item::before {
+  content: '◦';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 1.5rem;
+  width: 2px;
+  height: calc(100% - 1rem);
+  background: linear-gradient(to bottom, #333 50%, transparent 50%);
+  background-size: 2px 10px;
+}
+
+/* Notebook lines background */
+.notebook-bg {
+  background-image: 
+    linear-gradient(to right, #ff69b4 0px, transparent 1px),
+    linear-gradient(to bottom, transparent 39px, #e5e5e5 40px, #e5e5e5 41px, transparent 41px);
+  background-size: 100% 40px;
+}
+
+/* Hand-drawn social icons */
+.social-icon {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.social-icon:hover {
+  transform: rotate(5deg) scale(1.1);
+}
+
+.social-icon::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #333;
+  transition: width 0.3s ease;
+}
+
+.social-icon:hover::after {
+  width: 100%;
+}
+
+/* Animation classes */
+.animate-doodle-bounce {
+  animation: doodle-bounce 2s ease-in-out infinite;
+}
+
+.animate-sketch-draw {
+  animation: sketch-draw 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+/* Font utility classes */
+.font-handwritten {
+  font-family: var(--font-handwritten);
+}
+
+.font-sketch {
+  font-family: var(--font-sketch);
+}
+
+.font-clean {
+  font-family: var(--font-clean);
+}
+
+/* Custom rotation utilities */
+.rotate-slight {
+  transform: rotate(-0.5deg);
+}
+
+.rotate-slight-reverse {
+  transform: rotate(0.5deg);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom backdrop blur for navigation */
+.backdrop-blur-sketch {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.9);
+}
