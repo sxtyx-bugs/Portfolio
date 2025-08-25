@@ -1376,6 +1376,106 @@ input.sketch-border, textarea.sketch-border {
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Creative Background Patterns */
+.creative-background {
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(120,119,198,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,119,198,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(120,219,226,0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  animation: backgroundShift 20s ease-in-out infinite;
+  position: relative;
+}
+
+.dark .creative-background {
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(120,119,198,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,119,198,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(120,219,226,0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+}
+
+@keyframes backgroundShift {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  50% {
+    background-position: 100% 50%, 0% 0%, 80% 20%;
+  }
+}
+
+/* Interactive Grid Background */
+.creative-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(0,0,0,0.08) 1px, transparent 0);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+  z-index: 1;
+}
+
+.dark .creative-background::before {
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Particle System */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 50%;
+  animation: particleFloat 15s linear infinite;
+  z-index: 2;
+}
+
+.dark .particle {
+  background: rgba(255,255,255,0.2);
+}
+
+.particle:nth-child(odd) {
+  background: rgba(120,119,198,0.4);
+  animation-duration: 20s;
+}
+
+.dark .particle:nth-child(odd) {
+  background: rgba(120,119,198,0.3);
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(90vh) scale(1) rotate(90deg);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(10vh) scale(1) rotate(270deg);
+  }
+  100% {
+    transform: translateY(0vh) scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
 /* Enhanced backdrop blur */
 .backdrop-blur-sketch {
   backdrop-filter: blur(12px);

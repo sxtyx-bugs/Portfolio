@@ -19,7 +19,8 @@ export default function Home() {
     "Geolocation Expert 🌍",
     "Learning Japanese 🇯🇵",
     "Music Lover 🎵",
-    "Building Apps 📱"
+    "Building Apps 📱",
+    "Cooking Expert 👨‍🍳"
   ];
 
   const typewriterTexts = [
@@ -196,6 +197,19 @@ export default function Home() {
               <a href="#projects" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-projects">Projects</a>
               <a href="#contact" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-contact">Contact</a>
               
+              {/* Instagram Link */}
+              <a 
+                href="https://www.instagram.com/4zurit/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors flex items-center space-x-1"
+                data-testid="nav-instagram"
+                title="Follow me on Instagram"
+              >
+                <span>📸</span>
+                <span>@4zurit</span>
+              </a>
+              
               {/* Dark Mode Toggle */}
               <button
                 onClick={toggleDarkMode}
@@ -215,17 +229,32 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative" data-testid="hero-section">
-        <div className="max-w-4xl mx-auto px-4 text-center relative">
-          {/* Floating doodle elements */}
-          <div className="absolute top-10 left-10 text-4xl opacity-20 parallax" data-testid="doodle-star">⭐</div>
-          <div className="absolute top-20 right-20 text-3xl opacity-25 parallax" data-testid="doodle-arrow">→</div>
-          <div className="absolute bottom-32 left-20 text-2xl opacity-30 parallax" data-testid="doodle-sparkle">✨</div>
+      <section id="home" className="min-h-screen flex items-center justify-center relative creative-background hero-section" data-testid="hero-section">
+        {/* Particle System */}
+        {[...Array(15)].map((_, i) => (
+          <div 
+            key={i}
+            className="particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 15}s`,
+              animationDuration: `${15 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+        
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          {/* Enhanced Floating doodle elements */}
+          <div className="absolute top-10 left-10 text-4xl opacity-30 parallax interactive-doodle" data-testid="doodle-star">⭐</div>
+          <div className="absolute top-20 right-20 text-3xl opacity-35 parallax interactive-doodle" data-testid="doodle-arrow">→</div>
+          <div className="absolute bottom-32 left-20 text-2xl opacity-40 parallax interactive-doodle" data-testid="doodle-sparkle">✨</div>
+          <div className="absolute top-40 right-10 text-2xl opacity-25 parallax interactive-doodle">🚀</div>
+          <div className="absolute bottom-40 right-32 text-3xl opacity-30 parallax interactive-doodle">💡</div>
           
           {/* Main headline */}
-          <h1 className="font-handwritten text-7xl md:text-9xl font-bold mb-8 relative" data-testid="main-headline">
-            Hi, I'm 
-            <span className="relative inline-block">
+          <h1 className="font-handwritten creative-title text-7xl md:text-9xl font-bold mb-8 relative" data-testid="main-headline">
+            Hi, I'm <span className="interactive-doodle">👋</span>
+            <span className="relative inline-block creative-text">
               Satyajit
               <svg className="absolute -bottom-6 left-0 w-full h-8" viewBox="0 0 400 20" data-testid="headline-underline">
                 <path d="M10,15 Q100,5 200,12 T380,15" stroke="#333" strokeWidth="4" fill="none" 
@@ -236,9 +265,9 @@ export default function Home() {
           
           {/* Typewriter animation */}
           <div className="h-16 mb-12" data-testid="typewriter-container">
-            <p className="font-sketch text-3xl md:text-4xl text-gray-700">
+            <p className="font-sketch text-3xl md:text-4xl text-gray-700 dark:text-gray-300 creative-text">
               {typewriterText}
-              <span className="animate-pulse">|</span>
+              <span className="animate-pulse creative-glow">|</span>
             </p>
           </div>
           
