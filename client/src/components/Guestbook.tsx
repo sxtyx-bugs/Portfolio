@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Book, MapPin, Globe, Mail, PenTool, Users, MessageCircle } from 'lucide-react';
-import { apiRequest } from '@/lib/queryClient';
+import { Book, PenTool, Users, MessageCircle, RotateCcw, Palette } from 'lucide-react';
 import type { GuestbookEntry, InsertGuestbookEntry } from '@shared/schema';
 
 interface GuestbookProps {
@@ -13,10 +12,10 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
   const [formData, setFormData] = useState<InsertGuestbookEntry>({
     name: '',
     message: '',
-    email: '',
-    website: '',
-    location: ''
+    signature: ''
   });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
   // Fetch guestbook entries
@@ -44,10 +43,9 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
       setFormData({
         name: '',
         message: '',
-        email: '',
-        website: '',
-        location: ''
+        signature: ''
       });
+      clearCanvas();
       setShowForm(false);
     },
   });
@@ -55,14 +53,131 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name.trim() && formData.message.trim()) {
+      const canvas = canvasRef.current;
+      const signatureData = canvas ? canvas.toDataURL() : undefined;
       createEntryMutation.mutate({
         ...formData,
-        email: formData.email || undefined,
-        website: formData.website || undefined,
-        location: formData.location || undefined,
+        signature: signatureData,
       });
     }
   };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Add a subtle background
+        ctx.fillStyle = '#fafafa';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Add guidelines
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height * 0.75);
+        ctx.lineTo(canvas.width, canvas.height * 0.75);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    setIsDrawing(true);
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+  };
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return;
+    
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = '#1a1a1a';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+
+  // Touch events for mobile
+  const startTouchDrawing = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    setIsDrawing(true);
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+  };
+
+  const touchDraw = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    if (!isDrawing) return;
+    
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = '#1a1a1a';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
+  };
+
+  const stopTouchDrawing = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    setIsDrawing(false);
+  };
+
+  // Initialize canvas when form is shown
+  useState(() => {
+    if (showForm) {
+      setTimeout(() => clearCanvas(), 100);
+    }
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -109,73 +224,21 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
               </h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
-                      <Users className="w-4 h-4" />
-                      <span>Name *</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name || ''}
-                      onChange={handleChange}
-                      required
-                      className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      placeholder="Your artistic name..."
-                      data-testid="guestbook-name-input"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>Location</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location || ''}
-                      onChange={handleChange}
-                      className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      placeholder="Where are you from?"
-                      data-testid="guestbook-location-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
-                      <Mail className="w-4 h-4" />
-                      <span>Email</span>
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email || ''}
-                      onChange={handleChange}
-                      className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      placeholder="your@email.com"
-                      data-testid="guestbook-email-input"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
-                      <Globe className="w-4 h-4" />
-                      <span>Website</span>
-                    </label>
-                    <input
-                      type="url"
-                      name="website"
-                      value={formData.website || ''}
-                      onChange={handleChange}
-                      className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                      placeholder="https://yoursite.com"
-                      data-testid="guestbook-website-input"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+                    <Users className="w-4 h-4" />
+                    <span>Name *</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name || ''}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    placeholder="Your artistic name..."
+                    data-testid="guestbook-name-input"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -188,11 +251,49 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
                     value={formData.message || ''}
                     onChange={handleChange}
                     required
-                    rows={4}
+                    rows={3}
                     className="w-full p-3 sketch-border bg-transparent font-sketch text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
                     placeholder="Leave your creative thoughts and sketch-style message here..."
                     data-testid="guestbook-message-input"
                   />
+                </div>
+
+                {/* Hand-drawn Signature Canvas */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="font-handwritten text-lg text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+                      <Palette className="w-4 h-4" />
+                      <span>Draw Your Signature</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={clearCanvas}
+                      className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 sketch-border bg-transparent transition-colors"
+                      data-testid="clear-signature-btn"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Clear</span>
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <canvas
+                      ref={canvasRef}
+                      width={400}
+                      height={120}
+                      className="w-full h-auto sketch-border cursor-crosshair bg-gray-50 dark:bg-gray-700"
+                      onMouseDown={startDrawing}
+                      onMouseMove={draw}
+                      onMouseUp={stopDrawing}
+                      onMouseLeave={stopDrawing}
+                      onTouchStart={startTouchDrawing}
+                      onTouchMove={touchDraw}
+                      onTouchEnd={stopTouchDrawing}
+                      data-testid="signature-canvas"
+                    />
+                    <div className="absolute bottom-1 right-2 text-xs text-gray-400 font-sketch pointer-events-none">
+                      Draw with mouse or finger
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex justify-center space-x-4 pt-4">
@@ -266,27 +367,6 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
                         <h4 className="font-handwritten text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                           {entry.name}
                         </h4>
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                          {entry.location && (
-                            <div className="flex items-center space-x-1">
-                              <MapPin className="w-3 h-3" />
-                              <span>{entry.location}</span>
-                            </div>
-                          )}
-                          {entry.website && (
-                            <div className="flex items-center space-x-1">
-                              <Globe className="w-3 h-3" />
-                              <a 
-                                href={entry.website.startsWith('http') ? entry.website : `https://${entry.website}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-gray-900 dark:hover:text-gray-100 sketch-underline"
-                              >
-                                Website
-                              </a>
-                            </div>
-                          )}
-                        </div>
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-500 font-sketch">
                         {new Date(entry.createdAt).toLocaleDateString()}
@@ -294,17 +374,39 @@ export default function Guestbook({ className = '' }: GuestbookProps) {
                     </div>
 
                     {/* Message */}
-                    <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-none border-l-4 border-gray-300 dark:border-gray-600 relative">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-none border-l-4 border-gray-300 dark:border-gray-600 relative mb-4">
                       <p className="font-sketch text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap">
                         {entry.message}
                       </p>
-                      {/* Sketch signature line */}
+                    </div>
+
+                    {/* Hand-drawn Signature */}
+                    {entry.signature && (
+                      <div className="mt-4">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <PenTool className="w-3 h-3 text-gray-500" />
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-sketch">Hand-drawn signature:</span>
+                        </div>
+                        <div className="bg-white dark:bg-gray-600 p-2 sketch-border">
+                          <img 
+                            src={entry.signature} 
+                            alt={`${entry.name}'s signature`}
+                            className="max-w-full h-auto"
+                            style={{ maxHeight: '80px' }}
+                            data-testid={`signature-${entry.id}`}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Traditional signature line for entries without drawing */}
+                    {!entry.signature && (
                       <div className="mt-4 flex justify-end">
                         <div className="w-32 h-0.5 bg-gray-400 dark:bg-gray-500 relative">
                           <div className="absolute -right-1 -top-1 w-2 h-2 border border-gray-400 dark:border-gray-500 transform rotate-45"></div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               ))}

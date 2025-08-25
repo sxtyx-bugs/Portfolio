@@ -22,18 +22,14 @@ export const guestbookEntries = pgTable("guestbook_entries", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   message: text("message").notNull(),
-  email: varchar("email", { length: 255 }),
-  website: varchar("website", { length: 255 }),
-  location: varchar("location", { length: 100 }),
+  signature: text("signature"), // Base64 encoded drawing data
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const insertGuestbookSchema = createInsertSchema(guestbookEntries).pick({
   name: true,
   message: true,
-  email: true,
-  website: true,
-  location: true,
+  signature: true,
 });
 
 export type InsertGuestbookEntry = z.infer<typeof insertGuestbookSchema>;

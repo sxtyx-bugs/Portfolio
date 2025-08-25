@@ -47,9 +47,7 @@ export class MemStorage implements IStorage {
     const entry: GuestbookEntry = {
       ...insertEntry,
       id,
-      email: insertEntry.email ?? null,
-      website: insertEntry.website ?? null,
-      location: insertEntry.location ?? null,
+      signature: insertEntry.signature ?? null,
       createdAt: new Date()
     };
     this.guestbookEntries.set(id, entry);
