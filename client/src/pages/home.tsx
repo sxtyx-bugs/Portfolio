@@ -124,6 +124,8 @@ export default function Home() {
     { title: "Academic Excellence", icon: "🏆", detail: "Top scores in Computer Science" },
     { title: "AI Innovation", icon: "🤖", detail: "Built LensAI & Inforvi platforms" },
     { title: "OSINT Mastery", icon: "🌍", detail: "Created ORLON.OG geolocation site" },
+    { title: "Competitive Gaming", icon: "🎮", detail: "Team MGX - Apex Legends Mobile AU" },
+    { title: "Chess Strategy", icon: "♟️", detail: "Intermediate Player - 1400 ELO" },
     { title: "Taekwondo Champion", icon: "🥋", detail: "Multiple gold medals" },
     { title: "Certifications", icon: "📜", detail: "Oracle AI & Microsoft Azure" }
   ];
@@ -283,6 +285,12 @@ export default function Home() {
             <div className="about-paragraph-delay">
               <p className="about-text-enhanced">
                 When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or exploring the endless possibilities that technology offers. I believe in the power of continuous learning and the magic that happens when <span className="highlight-word">curiosity</span> meets <span className="highlight-word">dedication</span>.
+              </p>
+            </div>
+            
+            <div className="about-paragraph-delay">
+              <p className="about-text-enhanced">
+                Beyond the digital realm, I'm an <span className="highlight-word">intermediate chess player</span> with a 1400 ELO rating, where strategic thinking and pattern recognition sharpen my problem-solving skills. I also had the honor of competing for <span className="highlight-word">Team MGX</span> in Apex Legends Mobile Australian Competitive scene, combining tactical gameplay with team coordination under pressure.
               </p>
             </div>
             
