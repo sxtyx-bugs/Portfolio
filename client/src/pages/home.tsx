@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send } from "lucide-react";
+import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2 } from "lucide-react";
 
 export default function Home() {
   const [currentHobby, setCurrentHobby] = useState(0);
   const [typewriterText, setTypewriterText] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -56,6 +57,13 @@ export default function Home() {
     };
 
     typeWriter();
+
+    // Dark mode initialization
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
 
     // Cycling hobbies animation
     const hobbyInterval = setInterval(() => {
@@ -144,19 +152,61 @@ export default function Home() {
     console.log("Form submitted:", contactForm);
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
   return (
-    <div className="bg-white text-gray-900 font-clean overflow-x-hidden">
+    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-50 border-b border-gray-200" data-testid="navigation">
+      <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-50 border-b border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90" data-testid="navigation">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="font-handwritten text-xl font-bold sketch-underline" data-testid="logo">SP</div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#home" className="font-clean text-sm hover:text-gray-600 sketch-underline" data-testid="nav-home">Home</a>
-              <a href="#about" className="font-clean text-sm hover:text-gray-600 sketch-underline" data-testid="nav-about">About</a>
-              <a href="#achievements" className="font-clean text-sm hover:text-gray-600 sketch-underline" data-testid="nav-achievements">Achievements</a>
-              <a href="#projects" className="font-clean text-sm hover:text-gray-600 sketch-underline" data-testid="nav-projects">Projects</a>
-              <a href="#contact" className="font-clean text-sm hover:text-gray-600 sketch-underline" data-testid="nav-contact">Contact</a>
+            <div className="font-handwritten text-xl font-bold sketch-underline text-gray-900 dark:text-gray-100" data-testid="logo">SP</div>
+            
+            {/* Mobile Dark Mode Toggle */}
+            <div className="md:hidden">
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-full sketch-border hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 creative-theme-toggle"
+                data-testid="mobile-dark-mode-toggle"
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? (
+                  <Sun className="w-4 h-4 text-yellow-500" />
+                ) : (
+                  <Moon className="w-4 h-4 text-gray-700" />
+                )}
+              </button>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#home" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-home">Home</a>
+              <a href="#about" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-about">About</a>
+              <a href="#achievements" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-achievements">Achievements</a>
+              <a href="#projects" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-projects">Projects</a>
+              <a href="#contact" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-contact">Contact</a>
+              
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-full sketch-border hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 creative-theme-toggle"
+                data-testid="dark-mode-toggle"
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-700" />
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -208,7 +258,7 @@ export default function Home() {
       </section>
 
       {/* About Section - Enhanced */}
-      <section id="about" className="py-32 about-section-enhanced fade-in-section" data-testid="about-section">
+      <section id="about" className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section transition-colors duration-300" data-testid="about-section">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="about-title-enhanced text-center" data-testid="about-title">
@@ -246,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* Achievements Timeline */}
-      <section id="achievements" className="py-32 fade-in-section" data-testid="achievements-section">
+      <section id="achievements" className="py-32 fade-in-section bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="achievements-section">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="achievements-title">
             Achievements
@@ -290,24 +340,58 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Music section with Zaalima */}
-          <div className="sketch-card p-8 max-w-md mx-auto" data-testid="music-section">
-            <h3 className="font-handwritten text-2xl font-bold mb-4">Now Playing</h3>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="font-sketch text-lg">Zaalima (sped up)</p>
-                <p className="font-clean text-sm text-gray-600">Current favorite</p>
+          {/* Enhanced Music Player */}
+          <div className="creative-music-player mx-auto" data-testid="music-section">
+            <div className="music-player-container">
+              <div className="music-player-header">
+                <h3 className="font-artistic text-3xl font-bold text-center mb-2 music-title">
+                  Now Playing
+                  <div className="musical-notes">♪ ♫ ♪</div>
+                </h3>
               </div>
-              <button 
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="sketch-border p-3 hover:bg-gray-100 transition-all duration-200"
-                data-testid="music-play-btn"
-              >
-                {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-              </button>
-            </div>
-            <div className="w-full bg-gray-200 h-2 sketch-border">
-              <div className={`h-full bg-gray-800 transition-all duration-300 ${isPlaying ? 'w-1/3' : 'w-0'}`}></div>
+              
+              <div className="music-player-card">
+                <div className="music-info-section">
+                  <div className="song-artwork">
+                    <div className="vinyl-record">
+                      <div className="vinyl-center"></div>
+                      <div className="vinyl-grooves"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="song-details">
+                    <h4 className="font-sketch text-xl font-bold text-gray-900 dark:text-gray-100">Zaalima (sped up)</h4>
+                    <p className="font-clean text-sm text-gray-600 dark:text-gray-400">Current favorite track</p>
+                  </div>
+                </div>
+                
+                {/* YouTube Player Embed */}
+                <div className="youtube-player-container">
+                  <iframe
+                    width="100%"
+                    height="200"
+                    src="https://www.youtube.com/embed/e1m0fuEXEDU?autoplay=0&controls=1&modestbranding=1&rel=0&showinfo=0"
+                    title="Zaalima (sped up)"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="sketch-border"
+                  ></iframe>
+                </div>
+                
+                <div className="music-controls">
+                  <div className="equalizer-bars">
+                    <div className="bar bar-1"></div>
+                    <div className="bar bar-2"></div>
+                    <div className="bar bar-3"></div>
+                    <div className="bar bar-4"></div>
+                    <div className="bar bar-5"></div>
+                  </div>
+                  <div className="volume-icon">
+                    <Volume2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
