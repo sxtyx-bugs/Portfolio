@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2 } from "lucide-react";
+import Guestbook from "@/components/Guestbook";
 
 export default function Home() {
   const [currentHobby, setCurrentHobby] = useState(0);
@@ -196,6 +197,7 @@ export default function Home() {
               <a href="#achievements" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-achievements">Achievements</a>
               <a href="#projects" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-projects">Projects</a>
               <a href="#contact" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-contact">Contact</a>
+              <a href="#guestbook" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-guestbook">Guestbook</a>
               
               {/* Instagram Link */}
               <a 
@@ -532,6 +534,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Guestbook Section */}
+      <Guestbook />
 
       {/* Footer */}
       <footer className="py-8 border-t border-gray-200" data-testid="footer">
