@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2 } from "lucide-react";
+import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2, ArrowUp } from "lucide-react";
 import Guestbook from "@/components/Guestbook";
 
 export default function Home() {
@@ -7,6 +7,8 @@ export default function Home() {
   const [typewriterText, setTypewriterText] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -72,15 +74,36 @@ export default function Home() {
       setCurrentHobby((prev) => (prev + 1) % hobbies.length);
     }, 2500);
 
-    // Scroll-based animations
+    // Enhanced scroll-based animations with progress tracking
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
+      const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrolled / maxHeight) * 100;
       
+      setScrollProgress(progress);
+      setShowScrollTop(scrolled > 500);
+      
+      // Smooth parallax effects
       const parallaxElements = document.querySelectorAll('.parallax');
       parallaxElements.forEach((element, index) => {
-        const speed = 0.3 + (index * 0.1);
-        (element as HTMLElement).style.transform = `translateY(${scrolled * speed}px)`;
+        const speed = 0.2 + (index * 0.05);
+        const yPos = scrolled * speed;
+        (element as HTMLElement).style.transform = `translate3d(0, ${yPos}px, 0)`;
+      });
+      
+      // Advanced scroll effects for sections
+      const sections = document.querySelectorAll('.scroll-reveal');
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (isVisible) {
+          const visiblePercentage = Math.max(0, Math.min(1, 
+            (window.innerHeight - rect.top) / (window.innerHeight + rect.height)
+          ));
+          (section as HTMLElement).style.transform = `translateY(${(1 - visiblePercentage) * 30}px)`;
+          (section as HTMLElement).style.opacity = `${Math.max(0.3, visiblePercentage)}`;
+        }
       });
     };
 
@@ -113,11 +136,24 @@ export default function Home() {
       observer.observe(section);
     });
 
-    window.addEventListener('scroll', handleScroll);
+    // Smooth scroll behavior enhancement
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Add scroll listener with throttling for performance
+    let ticking = false;
+    const optimizedHandleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(handleScroll);
+        ticking = true;
+        setTimeout(() => { ticking = false; }, 10);
+      }
+    };
+    
+    window.addEventListener('scroll', optimizedHandleScroll, { passive: true });
 
     return () => {
       clearInterval(hobbyInterval);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', optimizedHandleScroll);
       observer.disconnect();
     };
   }, []);
@@ -167,10 +203,36 @@ export default function Home() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300">
+    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
+      {/* Scroll Progress Bar */}
+      <div 
+        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-gray-600 to-gray-800 dark:from-gray-400 dark:to-gray-200 z-50 transition-all duration-300 ease-out"
+        style={{ width: `${scrollProgress}%` }}
+        data-testid="scroll-progress"
+      />
+      
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-50 p-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full sketch-border hover:scale-110 transition-all duration-300 animate-bounce-subtle shadow-lg"
+          data-testid="scroll-to-top"
+          title="Back to top"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
+      
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-50 border-b border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90" data-testid="navigation">
+      <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-40 border-b border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90" data-testid="navigation">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="font-handwritten text-xl font-bold sketch-underline text-gray-900 dark:text-gray-100" data-testid="logo">SP</div>
@@ -231,7 +293,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative creative-background hero-section" data-testid="hero-section">
+      <section id="home" className="min-h-screen flex items-center justify-center relative creative-background hero-section scroll-reveal" data-testid="hero-section">
         {/* Particle System */}
         {[...Array(15)].map((_, i) => (
           <div 
@@ -291,7 +353,7 @@ export default function Home() {
       </section>
 
       {/* About Section - Enhanced */}
-      <section id="about" className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section transition-colors duration-300" data-testid="about-section">
+      <section id="about" className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="about-section">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="about-title-enhanced text-center" data-testid="about-title">
@@ -309,7 +371,7 @@ export default function Home() {
             
             <div className="about-paragraph-delay">
               <p className="about-text-enhanced">
-                My goals are ambitious but crystal clear: achieve a perfect <span className="highlight-word">10 GPA</span>, study in <span className="highlight-word">Japan</span> to immerse myself in cutting-edge technology culture, and become the absolute best in <span className="highlight-word">AI programming</span>. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
+                My goals are ambitious but crystal clear: excel in academics, study in <span className="highlight-word">Japan</span> to immerse myself in cutting-edge technology culture, and become the absolute best in <span className="highlight-word">AI programming</span>. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
               </p>
             </div>
             
@@ -335,7 +397,7 @@ export default function Home() {
       </section>
 
       {/* Achievements Timeline */}
-      <section id="achievements" className="py-32 fade-in-section bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="achievements-section">
+      <section id="achievements" className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="achievements-section">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="achievements-title">
             Achievements
@@ -364,7 +426,7 @@ export default function Home() {
       </section>
 
       {/* Hobbies & Passions */}
-      <section id="hobbies" className="py-32 bg-gray-50 fade-in-section" data-testid="hobbies-section">
+      <section id="hobbies" className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="hobbies-section">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="font-handwritten text-6xl font-bold mb-16" data-testid="hobbies-title">
             Hobbies & Passions
@@ -437,7 +499,7 @@ export default function Home() {
       </section>
 
       {/* Projects */}
-      <section id="projects" className="py-32 fade-in-section" data-testid="projects-section">
+      <section id="projects" className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="projects-section">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="projects-title">
             Projects
@@ -461,7 +523,7 @@ export default function Home() {
       </section>
 
       {/* Contact Form */}
-      <section id="contact" className="py-32 bg-gray-50 fade-in-section" data-testid="contact-section">
+      <section id="contact" className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="contact-section">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="contact-title">
             Let's Connect
@@ -536,10 +598,12 @@ export default function Home() {
       </section>
 
       {/* Guestbook Section */}
-      <Guestbook />
+      <div className="scroll-reveal transition-colors duration-300">
+        <Guestbook />
+      </div>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-gray-200" data-testid="footer">
+      <footer className="py-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="footer">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="font-clean text-sm text-gray-600">
             © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.

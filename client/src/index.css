@@ -1495,3 +1495,157 @@ input.sketch-border, textarea.sketch-border {
   opacity: 0.1;
   filter: invert(1);
 }
+
+/* Enhanced smooth scrolling & scroll reveal */
+/* Modern scroll snap for sections */
+@media (min-width: 768px) {
+  .scroll-snap-container {
+    scroll-snap-type: y mandatory;
+  }
+  
+  .scroll-snap-section {
+    scroll-snap-align: start;
+  }
+}
+
+/* Elegant scroll reveal animations */
+.scroll-reveal {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Bounce subtle animation for scroll-to-top */
+@keyframes bounce-subtle {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-4px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite;
+}
+
+/* Enhanced loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.dark .loading-shimmer {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+}
+
+/* Production-Ready Enhancements */
+
+/* Optimized animations with reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .scroll-reveal {
+    transition: none;
+  }
+  
+  .parallax {
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sketch-border {
+    border-width: 3px;
+  }
+  
+  .sketch-card {
+    border-width: 3px;
+  }
+}
+
+/* Improved text selection */
+::selection {
+  background: rgba(51, 51, 51, 0.2);
+  color: inherit;
+}
+
+.dark ::selection {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Better focus indicators */
+.interactive-element:focus-visible {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dark .interactive-element:focus-visible {
+  outline-color: #fff;
+}
+
+/* Print optimizations */
+@media print {
+  .fixed,
+  .parallax,
+  .animate-bounce-subtle,
+  .creative-theme-toggle {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .sketch-border {
+    border-color: black !important;
+  }
+}
+
+/* Performance optimizations */
+.parallax,
+.scroll-reveal,
+.animate-bounce-subtle {
+  will-change: transform;
+}
+
+/* Improved mobile responsive design */
+@media (max-width: 768px) {
+  /* Mobile scroll to top positioning */
+  button[data-testid="scroll-to-top"] {
+    bottom: 6rem;
+    right: 1rem;
+    padding: 0.75rem;
+  }
+  
+  button[data-testid="scroll-to-top"] .w-5 {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  /* Optimize scroll progress bar for mobile */
+  div[data-testid="scroll-progress"] {
+    height: 2px;
+  }
+}
