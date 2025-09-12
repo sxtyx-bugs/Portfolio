@@ -308,7 +308,17 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
+    <div className="paper-texture text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
+      {/* Background Doodles */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="doodle text-4xl" style={{ top: '10%', left: '5%', color: 'var(--cyan)' }}>⭐</div>
+        <div className="doodle text-3xl" style={{ top: '20%', right: '10%', color: 'var(--magenta)', animationDelay: '1s' }}>✨</div>
+        <div className="doodle text-2xl" style={{ top: '60%', left: '8%', color: 'var(--yellow)', animationDelay: '2s' }}>→</div>
+        <div className="doodle text-3xl" style={{ top: '80%', right: '15%', color: 'var(--red)', animationDelay: '3s' }}>💫</div>
+        <div className="doodle text-2xl" style={{ top: '40%', left: '3%', color: 'var(--aqua-green)', animationDelay: '4s' }}>←</div>
+        <div className="doodle text-4xl" style={{ top: '70%', right: '5%', color: 'var(--deep-blue)', animationDelay: '5s' }}>🌟</div>
+      </div>
+
       {/* Loading Screen */}
       {showLoading && (
         <LoadingScreen onFinish={() => setShowLoading(false)} />
@@ -360,9 +370,9 @@ export default function Home() {
         </motion.button>
       )}
       
-      {/* Enhanced Navigation */}
+      {/* Sketchy Navigation */}
       <motion.nav 
-        className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 paper-texture border-b-4 border-black transition-all duration-300"
         data-testid="navigation"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -370,16 +380,16 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+            {/* Sketchy Logo */}
             <motion.div 
               className="flex items-center space-x-3"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, rotate: 2 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">SP</span>
-            </div>
-              <span className="font-bold text-xl text-gray-900 dark:text-white">Satyajit Patil</span>
+              <div className="w-12 h-12 border-4 border-black bg-yellow-400 flex items-center justify-center transform rotate-3">
+                <span className="text-black font-bold text-lg sketch-heading">SP</span>
+              </div>
+              <span className="sketch-heading text-2xl">Satyajit Patil</span>
             </motion.div>
           
             {/* Navigation Links */}
@@ -397,29 +407,29 @@ export default function Home() {
                 <motion.a
                   key={link.id}
                   href={link.href} 
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  className={`sketch-button text-sm ${
                     currentSection === link.id 
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 shadow-sm' 
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ? 'bg-cyan-400 border-cyan-600' 
+                      : ''
                   }`}
                   data-testid={`nav-${link.id}`}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileHover={{ scale: 1.05, rotate: 1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {link.label}
+                  <span className="scribble-underline">{link.label}</span>
                 </motion.a>
               ))}
             </div>
             
-            {/* Theme Toggle */}
+            {/* Sketchy Theme Toggle */}
             <motion.button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 shadow-sm"
+              className="sketch-button p-2"
               data-testid="theme-toggle"
-              whileHover={{ scale: 1.05, rotate: 15 }}
+              whileHover={{ scale: 1.05, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -428,18 +438,11 @@ export default function Home() {
           </div>
       </motion.nav>
 
-      {/* Desktop OS Hero Section */}
+      {/* Sketchy Hero Section */}
       <section 
         id="home" 
-        className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden"
+        className="min-h-screen paper-texture transition-colors duration-300 relative overflow-hidden"
         data-testid="hero-section"
-            style={{
-          backgroundImage: `
-            linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)
-          `,
-          backgroundSize: '20px 20px'
-        }}
       >
         {/* Desktop Icons */}
         <div className="absolute inset-0 p-8">
@@ -451,12 +454,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, rotate: 2 }}
             >
-              <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
-                <Book className="w-8 h-8 text-red-600" />
+              <div className="sketch-card w-16 h-16 flex items-center justify-center">
+                <Book className="w-8 h-8 text-black" />
               </div>
-              <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium">Resume.pdf</p>
+              <p className="text-xs text-center mt-2 text-black font-medium sketch-text">Resume.pdf</p>
             </motion.div>
 
             {/* About Me Icon */}
@@ -465,12 +468,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, rotate: -2 }}
             >
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-lg shadow-lg border border-blue-200 dark:border-blue-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
-                <div className="w-8 h-8 bg-blue-600 rounded"></div>
+              <div className="sketch-card w-16 h-16 flex items-center justify-center bg-cyan-400">
+                <div className="w-8 h-8 bg-black"></div>
               </div>
-              <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium">About Me</p>
+              <p className="text-xs text-center mt-2 text-black font-medium sketch-text">About Me</p>
             </motion.div>
           </div>
 
@@ -483,28 +486,31 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, rotate: 2 }}
               >
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-lg shadow-lg border border-blue-200 dark:border-blue-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
-                  <div className="w-8 h-8 bg-blue-600 rounded"></div>
+                <div className={`sketch-card w-16 h-16 flex items-center justify-center ${
+                  index % 3 === 0 ? 'bg-magenta-400' : 
+                  index % 3 === 1 ? 'bg-yellow-400' : 'bg-aqua-green'
+                }`}>
+                  <div className="w-8 h-8 bg-black"></div>
                 </div>
-                <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium max-w-20">
+                <p className="text-xs text-center mt-2 text-black font-medium sketch-text max-w-20">
                   Project {String(index + 1).padStart(2, '0')} ({project.title})
                 </p>
               </motion.div>
             ))}
           </div>
           
-          {/* Sticky Note */}
+          {/* Sketchy Sticky Note */}
           <motion.div
-            className="absolute top-8 left-8 w-48 h-48 bg-yellow-300 dark:bg-yellow-400 rounded-lg shadow-lg border border-yellow-400 dark:border-yellow-500 p-4"
+            className="absolute top-8 left-8 w-48 h-48 bg-yellow-400 border-4 border-black p-4"
             initial={{ opacity: 0, rotate: -5 }}
             animate={{ opacity: 1, rotate: 0 }}
             transition={{ duration: 0.8, delay: 1.0 }}
             whileHover={{ rotate: -2, scale: 1.02 }}
           >
-            <div className="text-sm font-bold text-gray-800 mb-3">To do:</div>
-            <div className="space-y-1 text-xs text-gray-700">
+            <div className="sketch-heading text-sm mb-3">To do:</div>
+            <div className="space-y-1 text-xs text-black">
               <div>• Land my dream AI job</div>
               <div>• Master Japanese language</div>
               <div>• Move to Japan</div>
@@ -517,80 +523,66 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Central Title */}
+        {/* Central Sketchy Title */}
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <motion.div
-              className="text-4xl md:text-6xl font-light text-gray-800 dark:text-gray-200 mb-2"
+              className="sketch-text text-4xl md:text-6xl mb-2"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              style={{ fontFamily: 'Inter, sans-serif' }}
             >
               welcome to my
             </motion.div>
             <motion.div
-              className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white"
+              className="sketch-heading text-6xl md:text-8xl"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              style={{ fontFamily: 'Inter, sans-serif' }}
             >
               portfolio.
             </motion.div>
         </div>
         </div>
 
-        {/* macOS-style Dock */}
+        {/* Sketchy Dock */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl px-4 py-2 shadow-2xl border border-gray-200 dark:border-gray-700"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 paper-texture border-4 border-black px-4 py-2"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
         >
           <div className="flex items-center space-x-3">
-            {/* Dock Icons */}
+            {/* Sketchy Dock Icons */}
             <motion.div
-              className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
+              className="sketch-card w-12 h-12 flex items-center justify-center cursor-pointer"
+              whileHover={{ scale: 1.1, rotate: 2 }}
             >
-              <div className="w-6 h-6 bg-gray-600 rounded"></div>
+              <div className="w-6 h-6 bg-black"></div>
             </motion.div>
             <motion.div
-              className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
+              className="sketch-card w-12 h-12 flex items-center justify-center cursor-pointer bg-cyan-400"
+              whileHover={{ scale: 1.1, rotate: -2 }}
             >
-              <div className="w-6 h-6 bg-blue-600 rounded"></div>
+              <div className="w-6 h-6 bg-black"></div>
             </motion.div>
             <motion.div
-              className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
+              className="sketch-card w-12 h-12 flex items-center justify-center cursor-pointer bg-magenta-400"
+              whileHover={{ scale: 1.1, rotate: 2 }}
             >
-              <div className="w-6 h-6 bg-green-600 rounded"></div>
+              <div className="w-6 h-6 bg-black"></div>
             </motion.div>
             <motion.div
-              className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
+              className="sketch-card w-12 h-12 flex items-center justify-center cursor-pointer bg-yellow-400"
+              whileHover={{ scale: 1.1, rotate: -2 }}
             >
-              <div className="w-6 h-6 bg-purple-600 rounded"></div>
+              <div className="w-6 h-6 bg-black"></div>
             </motion.div>
             <motion.div
-              className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
+              className="sketch-card w-12 h-12 flex items-center justify-center cursor-pointer bg-aqua-green"
+              whileHover={{ scale: 1.1, rotate: 2 }}
             >
-              <div className="w-6 h-6 bg-orange-600 rounded"></div>
-            </motion.div>
-            <motion.div
-              className="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
-            >
-              <div className="w-6 h-6 bg-pink-600 rounded"></div>
-            </motion.div>
-            <motion.div
-              className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-              whileHover={{ scale: 1.1 }}
-            >
-              <div className="w-6 h-6 bg-red-600 rounded"></div>
+              <div className="w-6 h-6 bg-black"></div>
             </motion.div>
           </div>
         </motion.div>
@@ -611,10 +603,10 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* About Section - Enhanced with Scroll Animations */}
+      {/* Sketchy About Section */}
       <section 
         id="about" 
-        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 relative overflow-hidden"
+        className="py-32 paper-texture transition-colors duration-300 relative overflow-hidden"
         data-testid="about-section"
       >
         {/* Background Elements */}
@@ -630,10 +622,10 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" data-testid="about-title">
+            <h2 className="sketch-heading text-4xl md:text-5xl mb-4" data-testid="about-title">
               About Me
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="sketch-text text-lg">
               Passionate about AI, OSINT, and building the future
             </p>
           </motion.div>
@@ -646,15 +638,15 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Story</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <h3 className="sketch-subheading text-2xl mb-4">My Story</h3>
+                <p className="sketch-text leading-relaxed">
                   I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
               </p>
             </div>
             
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Goals</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                <h3 className="sketch-subheading text-2xl mb-4">My Goals</h3>
+                <p className="sketch-text leading-relaxed mb-6">
                   My goals are ambitious but crystal clear. Click on any goal to mark it as completed!
                 </p>
                 
@@ -663,13 +655,13 @@ export default function Home() {
                   {goals.map((goal) => (
                     <motion.div
                       key={goal.id}
-                      className={`checklist-item p-3 rounded-lg border-2 transition-all duration-300 ${
+                      className={`sketch-card p-3 transition-all duration-300 ${
                         completedGoals.has(goal.id) 
-                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
-                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
+                          ? 'border-green-500 bg-green-50' 
+                          : 'hover:border-cyan-400'
                       }`}
                       onClick={() => toggleGoal(goal.id)}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.02, rotate: 1 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       <div className="flex items-center space-x-3">
@@ -693,10 +685,10 @@ export default function Home() {
                             </motion.span>
                           )}
                         </motion.div>
-                        <span className={`text-sm font-medium transition-colors duration-300 ${
+                        <span className={`sketch-text text-sm font-medium transition-colors duration-300 ${
                           completedGoals.has(goal.id)
-                            ? 'text-green-600 dark:text-green-400 line-through'
-                            : 'text-gray-700 dark:text-gray-300'
+                            ? 'text-green-600 line-through'
+                            : 'text-black'
                         }`}>
                           {goal.text}
                         </span>
@@ -707,32 +699,32 @@ export default function Home() {
               </div>
             
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Interests</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <h3 className="sketch-subheading text-2xl mb-4">My Interests</h3>
+                <p className="sketch-text leading-relaxed">
                   When I'm not coding, you'll find me exploring the depths of OSINT research, learning about geolocation techniques, or diving into the latest AI papers. I believe that the future belongs to those who can bridge the gap between human creativity and machine intelligence.
               </p>
             </div>
             </motion.div>
             
             <motion.div
-              className="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700"
+              className="sketch-card p-8"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Skills & Technologies</h3>
+              <h3 className="sketch-subheading text-xl mb-6">Skills & Technologies</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-3">
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">AI & Machine Learning</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Web Development</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">OSINT Research</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Data Visualization</div>
+                  <div className="skill-tag">AI & Machine Learning</div>
+                  <div className="skill-tag">Web Development</div>
+                  <div className="skill-tag">OSINT Research</div>
+                  <div className="skill-tag">Data Visualization</div>
             </div>
                 <div className="space-y-3">
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Python</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">JavaScript/TypeScript</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">React</div>
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Node.js</div>
+                  <div className="skill-tag">Python</div>
+                  <div className="skill-tag">JavaScript/TypeScript</div>
+                  <div className="skill-tag">React</div>
+                  <div className="skill-tag">Node.js</div>
                 </div>
             </div>
             </motion.div>
@@ -882,10 +874,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects Section - Enhanced with Scroll Animations */}
+      {/* Sketchy Projects Section */}
       <section 
         id="projects" 
-        className="py-32 bg-white dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden"
+        className="py-32 paper-texture transition-colors duration-300 relative overflow-hidden"
         data-testid="projects-section"
       >
         {/* Animated Background */}
@@ -922,10 +914,10 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="sketch-heading text-4xl md:text-5xl mb-4">
               My Projects
           </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="sketch-text text-lg">
               A collection of my work and creative projects
             </p>
           </motion.div>
@@ -944,22 +936,22 @@ export default function Home() {
               >
                 <div className="relative w-full h-80 preserve-3d group-hover:rotate-y-180 transition-transform duration-700">
                   {/* Front of Card */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:border-gray-300 dark:group-hover:border-gray-600">
+                  <div className="absolute inset-0 w-full h-full backface-hidden sketch-card p-8">
                     <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                      <h3 className="sketch-subheading text-2xl mb-3 group-hover:text-cyan-400 transition-colors duration-300">
                         {project.title}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                      <p className="sketch-text leading-relaxed">
                         {project.description}
                       </p>
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                      <div className="skill-tag text-sm">
                         {project.tech}
                       </div>
                       <motion.div
-                        className="text-blue-600 dark:text-blue-400 font-medium"
+                        className="sketch-text font-medium"
                         whileHover={{ x: 5 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -969,18 +961,18 @@ export default function Home() {
                   </div>
 
                   {/* Back of Card */}
-                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-8 shadow-lg text-white">
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 sketch-card p-8 bg-gradient-to-br from-cyan-400 to-magenta-400 text-black">
                     <div className="h-full flex flex-col justify-between">
                       <div>
-                        <h3 className="text-2xl font-bold mb-4">{project.title}</h3>
+                        <h3 className="sketch-heading text-2xl mb-4">{project.title}</h3>
                         <div className="space-y-3">
                           <div>
-                            <h4 className="font-semibold mb-2">Tech Stack:</h4>
-                            <p className="text-blue-100 text-sm">{project.tech}</p>
+                            <h4 className="sketch-subheading font-semibold mb-2">Tech Stack:</h4>
+                            <p className="sketch-text text-sm">{project.tech}</p>
                           </div>
                           <div>
-                            <h4 className="font-semibold mb-2">Features:</h4>
-                            <ul className="text-blue-100 text-sm space-y-1">
+                            <h4 className="sketch-subheading font-semibold mb-2">Features:</h4>
+                            <ul className="sketch-text text-sm space-y-1">
                               <li>• Modern UI/UX Design</li>
                               <li>• Responsive Layout</li>
                               <li>• Performance Optimized</li>
@@ -992,15 +984,15 @@ export default function Home() {
                       
                       <div className="flex space-x-3">
                         <motion.button
-                          className="px-4 py-2 bg-white/20 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors duration-300"
-                          whileHover={{ scale: 1.05 }}
+                          className="sketch-button text-sm"
+                          whileHover={{ scale: 1.05, rotate: 1 }}
                           whileTap={{ scale: 0.95 }}
                         >
                           View Demo
                         </motion.button>
                         <motion.button
-                          className="px-4 py-2 bg-white/20 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors duration-300"
-                          whileHover={{ scale: 1.05 }}
+                          className="sketch-button text-sm"
+                          whileHover={{ scale: 1.05, rotate: -1 }}
                           whileTap={{ scale: 0.95 }}
                         >
                           GitHub
