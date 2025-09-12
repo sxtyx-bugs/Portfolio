@@ -78,10 +78,10 @@ export default function Home() {
     // Set random quote on load
     setDynamicQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     
-    // Hide loading screen after 3 seconds
-    const loadingTimer = setTimeout(() => {
+    // Fallback: hide loading screen after 10 seconds
+    const fallbackTimer = setTimeout(() => {
       setShowLoading(false);
-    }, 3000);
+    }, 10000);
 
     // Typewriter animation
     let currentTextIndex = 0;
@@ -230,6 +230,11 @@ export default function Home() {
         e.preventDefault();
         setShowTerminal(true);
       }
+      // Skip loading screen with Enter key
+      if (e.key === 'Enter' && showLoading) {
+        e.preventDefault();
+        setShowLoading(false);
+      }
     };
 
     // Event listeners for custom events
@@ -249,7 +254,7 @@ export default function Home() {
 
     return () => {
       clearInterval(hobbyInterval);
-      clearTimeout(loadingTimer);
+      clearTimeout(fallbackTimer);
       window.removeEventListener('scroll', optimizedHandleScroll);
       window.removeEventListener('keydown', handleKeyPress);
       window.removeEventListener('playMusic', handlePlayMusic);
@@ -313,7 +318,9 @@ export default function Home() {
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
       {/* Loading Screen */}
-      <LoadingScreen onComplete={() => setShowLoading(false)} />
+      {showLoading && (
+        <LoadingScreen onComplete={() => setShowLoading(false)} />
+      )}
 
       {/* Custom Cursor */}
       <CustomCursor variant={cursorVariant} />
