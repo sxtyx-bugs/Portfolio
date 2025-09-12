@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2, ArrowUp } from "lucide-react";
 import Guestbook from "@/components/Guestbook";
-import { CustomCursor } from "@/components/ui/custom-cursor";
-import { RetroTerminal } from "@/components/ui/retro-terminal";
-import { SkillsInventory } from "@/components/ui/skills-inventory";
 import { LoadingScreen } from "@/components/ui/loading-screen";
-import { JapanDream } from "@/components/ui/japan-dream";
-import { ConfettiEffect } from "@/components/ui/confetti-effect";
 
 export default function Home() {
   const [currentHobby, setCurrentHobby] = useState(0);
@@ -24,23 +19,8 @@ export default function Home() {
 
   // New state for enhanced features
   const [showLoading, setShowLoading] = useState(true);
-  const [showTerminal, setShowTerminal] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [cursorVariant, setCursorVariant] = useState<'glow' | 'sword' | 'joystick'>('glow');
-  const [dynamicQuote, setDynamicQuote] = useState('');
   const [currentSection, setCurrentSection] = useState('home');
 
-  // Dynamic quotes
-  const quotes = [
-    "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
-    "Code is like humor. When you have to explain it, it's bad. - Cory House",
-    "The best way to predict the future is to create it. - Peter Drucker",
-    "Innovation distinguishes between a leader and a follower. - Steve Jobs",
-    "The only way to do great work is to love what you do. - Steve Jobs",
-    "Dream big and dare to fail. - Norman Vaughan",
-    "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
-    "The way to get started is to quit talking and begin doing. - Walt Disney"
-  ];
 
   const hobbies = [
     "Coding 💻",
@@ -61,9 +41,6 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    // Set random quote on load
-    setDynamicQuote(quotes[Math.floor(Math.random() * quotes.length)]);
-    
     // Fallback: hide loading screen after 10 seconds
     const fallbackTimer = setTimeout(() => {
       setShowLoading(false);
@@ -125,7 +102,6 @@ export default function Home() {
         { id: 'projects', element: document.getElementById('projects') },
         { id: 'contact', element: document.getElementById('contact') },
         { id: 'skills', element: document.getElementById('skills') },
-        { id: 'japan-dream', element: document.getElementById('japan-dream') },
         { id: 'guestbook', element: document.getElementById('guestbook') }
       ];
 
@@ -210,10 +186,6 @@ export default function Home() {
 
     // Keyboard event listeners
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === '~' || e.key === '`') {
-        e.preventDefault();
-        setShowTerminal(true);
-      }
       // Skip loading screen with Enter key
       if (e.key === 'Enter' && showLoading) {
         e.preventDefault();
@@ -221,28 +193,13 @@ export default function Home() {
       }
     };
 
-    // Event listeners for custom events
-    const handlePlayMusic = () => {
-      // Trigger music play
-      console.log('Playing music...');
-    };
-
-    const handleShowConfetti = () => {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
-    };
-
     window.addEventListener('keydown', handleKeyPress);
-    window.addEventListener('playMusic', handlePlayMusic);
-    window.addEventListener('showConfetti', handleShowConfetti);
 
     return () => {
       clearInterval(hobbyInterval);
       clearTimeout(fallbackTimer);
       window.removeEventListener('scroll', optimizedHandleScroll);
       window.removeEventListener('keydown', handleKeyPress);
-      window.removeEventListener('playMusic', handlePlayMusic);
-      window.removeEventListener('showConfetti', handleShowConfetti);
       observer.disconnect();
     };
   }, []);
@@ -306,257 +263,301 @@ export default function Home() {
         <LoadingScreen onFinish={() => setShowLoading(false)} />
       )}
 
-      {/* Custom Cursor */}
-      <CustomCursor variant={cursorVariant} />
 
 
 
 
 
-      {/* Retro Terminal */}
-      <RetroTerminal
-        isOpen={showTerminal}
-        onClose={() => setShowTerminal(false)}
-      />
 
       
-      {/* Scroll to Top Button */}
+      {/* Scroll Progress Indicator */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-50 origin-left"
+        style={{ scaleX: scrollProgress }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: scrollProgress }}
+        transition={{ duration: 0.1 }}
+      />
+
+      {/* Enhanced Scroll to Top Button */}
       {showScrollTop && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 nb-button"
+          className="fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
           data-testid="scroll-to-top"
           title="Back to top"
-          whileHover={{ scale: 1.1 }}
+          initial={{ opacity: 0, scale: 0, rotate: -180 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 0, rotate: 180 }}
+          whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
         >
           <ArrowUp className="w-5 h-5" />
         </motion.button>
       )}
       
-      {/* Retro Game Navigation */}
-      <nav className="retro-navbar" data-testid="navigation">
-        <div className="navbar-container">
-          <motion.div 
-            className="navbar-logo" 
-            data-testid="logo"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            SP
-          </motion.div>
+      {/* Enhanced Navigation */}
+      <motion.nav 
+        className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 transition-all duration-300"
+        data-testid="navigation"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <motion.div 
+              className="flex items-center space-x-3"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">SP</span>
+            </div>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">Satyajit Patil</span>
+            </motion.div>
           
-          <div className="navbar-links">
-            <motion.a 
-              href="#home" 
-              className={`navbar-link ${currentSection === 'home' ? 'active' : ''}`}
-              data-testid="nav-home"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Home
-            </motion.a>
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-1">
+              {[
+                { href: '#home', label: 'Home', id: 'home' },
+                { href: '#about', label: 'About', id: 'about' },
+                { href: '#achievements', label: 'Achievements', id: 'achievements' },
+                { href: '#projects', label: 'Projects', id: 'projects' },
+                { href: '#skills', label: 'Skills', id: 'skills' },
+                { href: '#guestbook', label: 'Guestbook', id: 'guestbook' },
+                { href: '#contact', label: 'Contact', id: 'contact' }
+              ].map((link, index) => (
+                <motion.a
+                  key={link.id}
+                  href={link.href} 
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                    currentSection === link.id 
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 shadow-sm' 
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                  data-testid={`nav-${link.id}`}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+            </div>
             
-            <motion.a 
-              href="#about" 
-              className={`navbar-link ${currentSection === 'about' ? 'active' : ''}`}
-              data-testid="nav-about"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              About
-            </motion.a>
-            
-            <motion.a 
-              href="#achievements" 
-              className={`navbar-link ${currentSection === 'achievements' ? 'active' : ''}`}
-              data-testid="nav-achievements"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Achievements
-            </motion.a>
-            
-            <motion.a 
-              href="#projects" 
-              className={`navbar-link ${currentSection === 'projects' ? 'active' : ''}`}
-              data-testid="nav-projects"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Projects
-            </motion.a>
-            
-            <motion.a 
-              href="#contact" 
-              className={`navbar-link ${currentSection === 'contact' ? 'active' : ''}`}
-              data-testid="nav-contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Contact
-            </motion.a>
-            
-            <motion.a 
-              href="#skills" 
-              className={`navbar-link ${currentSection === 'skills' ? 'active' : ''}`}
-              data-testid="nav-skills"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Skills
-            </motion.a>
-            
-            <motion.a 
-              href="#japan-dream" 
-              className={`navbar-link ${currentSection === 'japan-dream' ? 'active' : ''}`}
-              data-testid="nav-japan-dream"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Japan Dream
-            </motion.a>
-            
-            <motion.a 
-              href="#guestbook" 
-              className={`navbar-link ${currentSection === 'guestbook' ? 'active' : ''}`}
-              data-testid="nav-guestbook"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Guestbook
-            </motion.a>
-              
-              {/* Instagram Link */}
-            <motion.a 
-                href="https://www.instagram.com/4zurit/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-              className="navbar-link flex items-center space-x-1"
-                data-testid="nav-instagram"
-                title="Follow me on Instagram"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              >
-                <span>📸</span>
-                <span>@4zurit</span>
-            </motion.a>
-              
-              {/* Dark Mode Toggle */}
+            {/* Theme Toggle */}
             <motion.button
-                onClick={toggleDarkMode}
-              className="navbar-link"
-                data-testid="dark-mode-toggle"
-                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              whileHover={{ scale: 1.05 }}
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 shadow-sm"
+              data-testid="theme-toggle"
+              whileHover={{ scale: 1.05, rotate: 15 }}
               whileTap={{ scale: 0.95 }}
-              >
-                {isDarkMode ? (
-                <Sun className="w-5 h-5" />
-                ) : (
-                <Moon className="w-5 h-5" />
-                )}
+            >
+              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </motion.button>
+            </div>
           </div>
-        </div>
-      </nav>
+      </motion.nav>
 
-      {/* Hero Section - Complete Revamp */}
+      {/* Desktop OS Hero Section */}
       <section 
         id="home" 
-        className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 transition-colors duration-300"
+        className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden"
         data-testid="hero-section"
+            style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px'
+        }}
       >
-        <div className="w-full max-w-7xl mx-auto px-6">
-          {/* Main Content Container */}
-          <div className="relative">
-            {/* Welcome Text with Staggered Animation */}
-            <div className="text-center mb-16">
-              <motion.div
-                className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white mb-4"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                welcome to my
-              </motion.div>
-              <motion.div
-                className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white mb-8"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                portfolio.
-              </motion.div>
-            </div>
-
-            {/* Name and Title */}
+        {/* Desktop Icons */}
+        <div className="absolute inset-0 p-8">
+          {/* Left Side Icons */}
+          <div className="absolute left-8 top-32 space-y-8">
+            {/* Resume Icon */}
             <motion.div
-              className="text-center mb-16"
+              className="desktop-icon group cursor-pointer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                Satyajit Patil's Portfolio
-          </h1>
-              <div className="text-lg text-gray-600 dark:text-gray-400">
-              {typewriterText}
-                <span className="animate-pulse">|</span>
-          </div>
+              <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
+                <Book className="w-8 h-8 text-red-600" />
+              </div>
+              <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium">Resume.pdf</p>
             </motion.div>
 
-            {/* Action Buttons */}
+            {/* About Me Icon */}
             <motion.div
-              className="flex justify-center space-x-6 mb-20"
+              className="desktop-icon group cursor-pointer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <motion.button
-                className="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Contact
-              </motion.button>
-              <motion.button
-                className="px-8 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 transition-colors duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Resume
-              </motion.button>
-            </motion.div>
-
-            {/* Date Display */}
-            <motion.div
-              className="text-center text-sm text-gray-500 dark:text-gray-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-            >
-              {new Date().toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                month: 'short', 
-                day: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-              })}
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-lg shadow-lg border border-blue-200 dark:border-blue-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
+                <div className="w-8 h-8 bg-blue-600 rounded"></div>
+              </div>
+              <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium">About Me</p>
             </motion.div>
           </div>
+
+          {/* Right Side Project Icons */}
+          <div className="absolute right-8 top-32 space-y-6">
+            {projects.slice(0, 4).map((project, index) => (
+              <motion.div
+                key={index}
+                className="desktop-icon group cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-lg shadow-lg border border-blue-200 dark:border-blue-700 flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="w-8 h-8 bg-blue-600 rounded"></div>
+                </div>
+                <p className="text-xs text-center mt-2 text-gray-700 dark:text-gray-300 font-medium max-w-20">
+                  Project {String(index + 1).padStart(2, '0')} ({project.title})
+                </p>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Sticky Note */}
+          <motion.div
+            className="absolute top-8 left-8 w-48 h-48 bg-yellow-300 dark:bg-yellow-400 rounded-lg shadow-lg border border-yellow-400 dark:border-yellow-500 p-4"
+            initial={{ opacity: 0, rotate: -5 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            whileHover={{ rotate: -2, scale: 1.02 }}
+          >
+            <div className="text-sm font-bold text-gray-800 mb-3">To do:</div>
+            <div className="space-y-1 text-xs text-gray-700">
+              <div>• Land my dream AI job</div>
+              <div>• Master Japanese language</div>
+              <div>• Move to Japan</div>
+              <div>• Build revolutionary AI tools</div>
+              <div>• Contribute to open source</div>
+              <div>• Travel the world</div>
+              <div>• Master OSINT techniques</div>
+              <div>• Create amazing projects</div>
+          </div>
+          </motion.div>
         </div>
+
+        {/* Central Title */}
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <motion.div
+              className="text-4xl md:text-6xl font-light text-gray-800 dark:text-gray-200 mb-2"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              welcome to my
+            </motion.div>
+            <motion.div
+              className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              portfolio.
+            </motion.div>
+        </div>
+        </div>
+
+        {/* macOS-style Dock */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl px-4 py-2 shadow-2xl border border-gray-200 dark:border-gray-700"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+        >
+          <div className="flex items-center space-x-3">
+            {/* Dock Icons */}
+            <motion.div
+              className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-gray-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-blue-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-green-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-purple-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-orange-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-pink-600 rounded"></div>
+            </motion.div>
+            <motion.div
+              className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-6 h-6 bg-red-600 rounded"></div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Scrollbar */}
+        <motion.div
+          className="absolute right-2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-600 rounded-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
+        >
+          <motion.div
+            className="w-full bg-gray-600 dark:bg-gray-400 rounded-full"
+            style={{ height: '30%' }}
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </motion.div>
       </section>
 
-      {/* About Section - Complete Revamp */}
+      {/* About Section - Enhanced with Scroll Animations */}
       <section 
         id="about" 
-        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
+        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 relative overflow-hidden"
         data-testid="about-section"
       >
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-pink-500 rounded-full blur-3xl"></div>
+        </div>
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -583,22 +584,22 @@ export default function Home() {
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Story</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
-                </p>
-              </div>
-              
+              </p>
+            </div>
+            
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Goals</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   My goals are ambitious but crystal clear: excel in academics, study in Japan to immerse myself in cutting-edge technology culture, and become the absolute best in AI programming. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
-                </p>
-              </div>
-              
+              </p>
+            </div>
+            
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Interests</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   When I'm not coding, you'll find me exploring the depths of OSINT research, learning about geolocation techniques, or diving into the latest AI papers. I believe that the future belongs to those who can bridge the gap between human creativity and machine intelligence.
-                </p>
-              </div>
+              </p>
+            </div>
             </motion.div>
             
             <motion.div
@@ -614,14 +615,14 @@ export default function Home() {
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Web Development</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">OSINT Research</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Data Visualization</div>
-                </div>
+            </div>
                 <div className="space-y-3">
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Python</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">JavaScript/TypeScript</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">React</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Node.js</div>
                 </div>
-              </div>
+            </div>
             </motion.div>
           </div>
         </div>
@@ -769,13 +770,54 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects Section - Complete Revamp */}
+      {/* Projects Section - Enhanced with Scroll Animations */}
       <section 
         id="projects" 
-        className="py-32 bg-white dark:bg-gray-900 transition-colors duration-300"
+        className="py-32 bg-white dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden"
         data-testid="projects-section"
       >
+        {/* Animated Background */}
+        <div className="absolute inset-0 opacity-5">
+          <motion.div 
+            className="absolute top-10 right-20 w-48 h-48 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 20, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-10 left-20 w-32 h-32 bg-gradient-to-r from-pink-500 to-red-500 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1.2, 1, 1.2],
+              x: [0, 50, 0]
+            }}
+            transition={{ 
+              duration: 15, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+        </div>
         <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              My Projects
+          </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              A collection of my work and creative projects
+            </p>
+          </motion.div>
+          
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="projects-grid">
             {projects.map((project, index) => (
@@ -814,119 +856,54 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-
-          {/* Resume Section */}
-          <motion.div
-            className="mt-20 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-          >
-            <div className="inline-flex items-center space-x-4 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300">
-              <div className="w-12 h-12 bg-gray-900 dark:bg-white rounded-lg flex items-center justify-center">
-                <Book className="w-6 h-6 text-white dark:text-gray-900" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Resume.pdf</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Download my latest resume</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* To Do Section */}
-          <motion.div
-            className="mt-20"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.6 }}
-          >
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">To do:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.2, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Land my dream AI job</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.3, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Master Japanese language</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.4, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Move to Japan</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.5, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Build revolutionary AI tools</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.6, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Contribute to open source</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.7, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Travel the world</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.8, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Master OSINT techniques</span>
-                </motion.div>
-                <motion.div
-                  className="flex items-center space-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.9, duration: 0.4 }}
-                >
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-gray-700 dark:text-gray-300">Create amazing projects</span>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
-      {/* Contact Section - Complete Revamp */}
+      {/* Contact Section - Enhanced with Scroll Animations */}
       <section 
         id="contact" 
-        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
+        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 relative overflow-hidden"
         data-testid="contact-section"
       >
+        {/* Floating Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <motion.div 
+            className="absolute top-20 left-1/4 w-24 h-24 bg-blue-500 rounded-full"
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 360, 0]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+          <motion.div 
+            className="absolute top-1/3 right-1/4 w-16 h-16 bg-purple-500 rounded-full"
+            animate={{ 
+              y: [0, 20, 0],
+              x: [0, 10, 0]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-20 left-1/3 w-20 h-20 bg-pink-500 rounded-full"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [0, -180, 0]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+        </div>
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -935,8 +912,8 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" data-testid="contact-title">
-              Let's Connect
-            </h2>
+            Let's Connect
+          </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
               Ready to work together? Let's make something amazing.
             </p>
@@ -1024,51 +1001,51 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
                   <motion.input
-                    type="text"
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
+                  type="text"
+                  value={contactForm.name}
+                  onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
                     className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
-                    data-testid="contact-name"
+                  data-testid="contact-name"
                     whileFocus={{ scale: 1.02 }}
                     placeholder="Your name"
-                  />
-                </div>
-                
-                <div>
+                />
+              </div>
+              
+              <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
                   <motion.input
-                    type="email"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
                     className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
-                    data-testid="contact-email"
+                  data-testid="contact-email"
                     whileFocus={{ scale: 1.02 }}
                     placeholder="your@email.com"
-                  />
-                </div>
-                
-                <div>
+                />
+              </div>
+              
+              <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
                   <motion.textarea
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
                     rows={6}
                     className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 resize-none"
-                    data-testid="contact-message"
+                  data-testid="contact-message"
                     whileFocus={{ scale: 1.02 }}
                     placeholder="Tell me about your project..."
-                  />
-                </div>
-                
+                />
+              </div>
+              
                 <motion.button
-                  type="submit"
+                type="submit"
                   className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 px-6 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300 flex items-center justify-center space-x-2"
-                  data-testid="contact-submit"
+                data-testid="contact-submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                >
-                  <span>Send Message</span>
-                  <Send className="w-5 h-5" />
+              >
+                <span>Send Message</span>
+                <Send className="w-5 h-5" />
                 </motion.button>
               </motion.form>
             </motion.div>
@@ -1076,23 +1053,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Skills Inventory Section */}
-      <section 
-        id="skills" 
-        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
-        data-testid="skills-section"
-      >
-        <SkillsInventory />
-      </section>
-
-      {/* Japan Dream Section */}
-      <section 
-        id="japan-dream" 
-        className="py-32 fade-in-section scroll-reveal transition-colors duration-300"
-        data-testid="japan-dream-section"
-      >
-        <JapanDream />
-      </section>
 
       {/* Guestbook Section */}
       <div 
@@ -1105,31 +1065,11 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="footer">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          {/* Dynamic Quote */}
-          <motion.div 
-            className="mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <blockquote className="font-serif text-lg italic text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
-              "{dynamicQuote}"
-            </blockquote>
-          </motion.div>
           
           <p className="font-clean text-sm text-gray-600">
             © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.
           </p>
           
-          {/* Easter Egg Hint */}
-          <motion.div 
-            className="mt-4 text-xs text-gray-500 opacity-60"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ delay: 2 }}
-          >
-            💡 Press ~ to open the terminal
-          </motion.div>
           
           <div className="mt-4">
             <svg width="100" height="20" viewBox="0 0 100 20" className="mx-auto opacity-30">
