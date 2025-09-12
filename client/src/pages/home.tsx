@@ -6,6 +6,12 @@ import { GameProgress } from "@/components/ui/game-progress";
 import { CharacterAvatar } from "@/components/ui/character-avatar";
 import { AchievementPopup } from "@/components/ui/achievement-popup";
 import { LevelUpAnimation } from "@/components/ui/level-up-animation";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { RetroTerminal } from "@/components/ui/retro-terminal";
+import { SkillsInventory } from "@/components/ui/skills-inventory";
+import { LoadingScreen } from "@/components/ui/loading-screen";
+import { JapanDream } from "@/components/ui/japan-dream";
+import { ConfettiEffect } from "@/components/ui/confetti-effect";
 import { useGamification } from "@/hooks/use-gamification";
 
 export default function Home() {
@@ -21,6 +27,13 @@ export default function Home() {
     message: ""
   });
 
+  // New state for enhanced features
+  const [showLoading, setShowLoading] = useState(true);
+  const [showTerminal, setShowTerminal] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [cursorVariant, setCursorVariant] = useState<'glow' | 'sword' | 'joystick'>('glow');
+  const [dynamicQuote, setDynamicQuote] = useState('');
+
   // Gamification hook
   const {
     gameState,
@@ -30,6 +43,18 @@ export default function Home() {
     closeAchievement,
     closeLevelUp
   } = useGamification();
+
+  // Dynamic quotes
+  const quotes = [
+    "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+    "Code is like humor. When you have to explain it, it's bad. - Cory House",
+    "The best way to predict the future is to create it. - Peter Drucker",
+    "Innovation distinguishes between a leader and a follower. - Steve Jobs",
+    "The only way to do great work is to love what you do. - Steve Jobs",
+    "Dream big and dare to fail. - Norman Vaughan",
+    "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+    "The way to get started is to quit talking and begin doing. - Walt Disney"
+  ];
 
   const hobbies = [
     "Coding 💻",
@@ -50,6 +75,14 @@ export default function Home() {
   ];
 
   useEffect(() => {
+    // Set random quote on load
+    setDynamicQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    
+    // Hide loading screen after 3 seconds
+    const loadingTimer = setTimeout(() => {
+      setShowLoading(false);
+    }, 3000);
+
     // Typewriter animation
     let currentTextIndex = 0;
     let currentCharIndex = 0;
@@ -105,6 +138,8 @@ export default function Home() {
         { id: 'achievements', element: document.getElementById('achievements') },
         { id: 'projects', element: document.getElementById('projects') },
         { id: 'contact', element: document.getElementById('contact') },
+        { id: 'skills', element: document.getElementById('skills') },
+        { id: 'japan-dream', element: document.getElementById('japan-dream') },
         { id: 'guestbook', element: document.getElementById('guestbook') }
       ];
 
@@ -189,9 +224,36 @@ export default function Home() {
     
     window.addEventListener('scroll', optimizedHandleScroll, { passive: true });
 
+    // Keyboard event listeners
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === '~' || e.key === '`') {
+        e.preventDefault();
+        setShowTerminal(true);
+      }
+    };
+
+    // Event listeners for custom events
+    const handlePlayMusic = () => {
+      // Trigger music play
+      console.log('Playing music...');
+    };
+
+    const handleShowConfetti = () => {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('playMusic', handlePlayMusic);
+    window.addEventListener('showConfetti', handleShowConfetti);
+
     return () => {
       clearInterval(hobbyInterval);
+      clearTimeout(loadingTimer);
       window.removeEventListener('scroll', optimizedHandleScroll);
+      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('playMusic', handlePlayMusic);
+      window.removeEventListener('showConfetti', handleShowConfetti);
       observer.disconnect();
     };
   }, []);
@@ -250,6 +312,12 @@ export default function Home() {
 
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
+      {/* Loading Screen */}
+      <LoadingScreen onComplete={() => setShowLoading(false)} />
+
+      {/* Custom Cursor */}
+      <CustomCursor variant={cursorVariant} />
+
       {/* Game Progress Bar */}
       <GameProgress
         progress={gameState.progress}
@@ -275,6 +343,18 @@ export default function Home() {
         show={gameState.showLevelUp}
         newLevel={gameState.level}
         onComplete={closeLevelUp}
+      />
+
+      {/* Retro Terminal */}
+      <RetroTerminal
+        isOpen={showTerminal}
+        onClose={() => setShowTerminal(false)}
+      />
+
+      {/* Confetti Effect */}
+      <ConfettiEffect
+        trigger={showConfetti}
+        onComplete={() => setShowConfetti(false)}
       />
       
       {/* Scroll to Top Button */}
@@ -352,6 +432,26 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
             >
               Contact {!gameState.unlockedSections.includes('contact') && '🔒'}
+            </motion.a>
+            
+            <motion.a 
+              href="#skills" 
+              className={`navbar-link ${gameState.currentSection === 'skills' ? 'active' : ''} ${!gameState.unlockedSections.includes('skills') ? 'opacity-50' : ''}`}
+              data-testid="nav-skills"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Skills {!gameState.unlockedSections.includes('skills') && '🔒'}
+            </motion.a>
+            
+            <motion.a 
+              href="#japan-dream" 
+              className={`navbar-link ${gameState.currentSection === 'japan-dream' ? 'active' : ''} ${!gameState.unlockedSections.includes('japan-dream') ? 'opacity-50' : ''}`}
+              data-testid="nav-japan-dream"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Japan Dream {!gameState.unlockedSections.includes('japan-dream') && '🔒'}
             </motion.a>
             
             <motion.a 
@@ -807,6 +907,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Skills Inventory Section */}
+      <section 
+        id="skills" 
+        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('skills') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="skills-section"
+      >
+        <SkillsInventory />
+      </section>
+
+      {/* Japan Dream Section */}
+      <section 
+        id="japan-dream" 
+        className={`py-32 fade-in-section scroll-reveal transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('japan-dream') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="japan-dream-section"
+      >
+        <JapanDream />
+      </section>
+
       {/* Guestbook Section */}
       <div 
         className={`scroll-reveal transition-colors duration-300 ${
@@ -820,9 +942,32 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="footer">
         <div className="max-w-6xl mx-auto px-4 text-center">
+          {/* Dynamic Quote */}
+          <motion.div 
+            className="mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <blockquote className="font-serif text-lg italic text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+              "{dynamicQuote}"
+            </blockquote>
+          </motion.div>
+          
           <p className="font-clean text-sm text-gray-600">
             © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.
           </p>
+          
+          {/* Easter Egg Hint */}
+          <motion.div 
+            className="mt-4 text-xs text-gray-500 opacity-60"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ delay: 2 }}
+          >
+            💡 Press ~ to open the terminal
+          </motion.div>
+          
           <div className="mt-4">
             <svg width="100" height="20" viewBox="0 0 100 20" className="mx-auto opacity-30">
               <path d="M10,10 Q30,18 50,8 T90,15" stroke="#333" strokeWidth="2" fill="none" strokeDasharray="3,3"/>
