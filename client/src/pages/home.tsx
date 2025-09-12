@@ -549,7 +549,7 @@ export default function Home() {
 
               <div className="space-y-4">
                 <motion.a
-                  href="mailto:satyajit@example.com"
+                  href="mailto:sxtyxfr@gmail.com"
                   className="sketchy-card flex items-center space-x-4 p-4"
                   whileHover={{ scale: 1.02, rotate: 1 }}
                 >
@@ -558,12 +558,14 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-patrick font-semibold">Email</div>
-                    <div className="font-inter text-sm text-gray-600">satyajit@example.com</div>
+                    <div className="font-inter text-sm text-gray-600">sxtyxfr@gmail.com</div>
                   </div>
                 </motion.a>
 
                 <motion.a
-                  href="https://linkedin.com/in/satyajit"
+                  href="https://www.linkedin.com/in/satyajit-patil-667a89382/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="sketchy-card flex items-center space-x-4 p-4"
                   whileHover={{ scale: 1.02, rotate: -1 }}
                 >
@@ -572,12 +574,14 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-patrick font-semibold">LinkedIn</div>
-                    <div className="font-inter text-sm text-gray-600">linkedin.com/in/satyajit</div>
+                    <div className="font-inter text-sm text-gray-600">linkedin.com/in/satyajit-patil-667a89382</div>
                   </div>
                 </motion.a>
 
                 <motion.a
-                  href="https://github.com/satyajit"
+                  href="https://github.com/sxtyx-bugs"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="sketchy-card flex items-center space-x-4 p-4"
                   whileHover={{ scale: 1.02, rotate: 1 }}
                 >
@@ -586,7 +590,23 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-patrick font-semibold">GitHub</div>
-                    <div className="font-inter text-sm text-gray-600">github.com/satyajit</div>
+                    <div className="font-inter text-sm text-gray-600">github.com/sxtyx-bugs</div>
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  href="https://www.instagram.com/4zurit/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="sketchy-card flex items-center space-x-4 p-4"
+                  whileHover={{ scale: 1.02, rotate: -1 }}
+                >
+                  <div className="w-12 h-12 bg-[#FF4900] flex items-center justify-center">
+                    <Instagram className="w-6 h-6 text-black" />
+                  </div>
+                  <div>
+                    <div className="font-patrick font-semibold">Instagram</div>
+                    <div className="font-inter text-sm text-gray-600">instagram.com/4zurit</div>
                   </div>
                 </motion.a>
               </div>
