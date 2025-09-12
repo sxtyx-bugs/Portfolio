@@ -2,17 +2,12 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2, ArrowUp } from "lucide-react";
 import Guestbook from "@/components/Guestbook";
-import { GameProgress } from "@/components/ui/game-progress";
-import { CharacterAvatar } from "@/components/ui/character-avatar";
-import { AchievementPopup } from "@/components/ui/achievement-popup";
-import { LevelUpAnimation } from "@/components/ui/level-up-animation";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { RetroTerminal } from "@/components/ui/retro-terminal";
 import { SkillsInventory } from "@/components/ui/skills-inventory";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { JapanDream } from "@/components/ui/japan-dream";
 import { ConfettiEffect } from "@/components/ui/confetti-effect";
-import { useGamification } from "@/hooks/use-gamification";
 
 export default function Home() {
   const [currentHobby, setCurrentHobby] = useState(0);
@@ -33,16 +28,7 @@ export default function Home() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [cursorVariant, setCursorVariant] = useState<'glow' | 'sword' | 'joystick'>('glow');
   const [dynamicQuote, setDynamicQuote] = useState('');
-
-  // Gamification hook
-  const {
-    gameState,
-    unlockSection,
-    addXp,
-    setCurrentSection,
-    closeAchievement,
-    closeLevelUp
-  } = useGamification();
+  const [currentSection, setCurrentSection] = useState('home');
 
   // Dynamic quotes
   const quotes = [
@@ -148,10 +134,8 @@ export default function Home() {
           const rect = element.getBoundingClientRect();
           const isVisible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
           
-          if (isVisible && !gameState.unlockedSections.includes(id)) {
-            unlockSection(id);
+          if (isVisible) {
             setCurrentSection(id);
-            addXp(50); // XP for discovering a section
           }
         }
       });
@@ -325,32 +309,9 @@ export default function Home() {
       {/* Custom Cursor */}
       <CustomCursor variant={cursorVariant} />
 
-      {/* Game Progress Bar */}
-      <GameProgress
-        progress={gameState.progress}
-        level={gameState.level}
-        xp={gameState.xp}
-        maxXp={gameState.maxXp}
-      />
 
-      {/* Character Avatar */}
-      <CharacterAvatar
-        currentSection={gameState.currentSection}
-        isVisible={gameState.unlockedSections.includes(gameState.currentSection)}
-      />
 
-      {/* Achievement Popup */}
-      <AchievementPopup
-        achievement={gameState.currentAchievement}
-        onClose={closeAchievement}
-      />
 
-      {/* Level Up Animation */}
-      <LevelUpAnimation
-        show={gameState.showLevelUp}
-        newLevel={gameState.level}
-        onComplete={closeLevelUp}
-      />
 
       {/* Retro Terminal */}
       <RetroTerminal
@@ -358,11 +319,6 @@ export default function Home() {
         onClose={() => setShowTerminal(false)}
       />
 
-      {/* Confetti Effect */}
-      <ConfettiEffect
-        trigger={showConfetti}
-        onComplete={() => setShowConfetti(false)}
-      />
       
       {/* Scroll to Top Button */}
       {showScrollTop && (
@@ -393,7 +349,7 @@ export default function Home() {
           <div className="navbar-links">
             <motion.a 
               href="#home" 
-              className={`navbar-link ${gameState.currentSection === 'home' ? 'active' : ''}`}
+              className={`navbar-link ${currentSection === 'home' ? 'active' : ''}`}
               data-testid="nav-home"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -403,72 +359,72 @@ export default function Home() {
             
             <motion.a 
               href="#about" 
-              className={`navbar-link ${gameState.currentSection === 'about' ? 'active' : ''} ${!gameState.unlockedSections.includes('about') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'about' ? 'active' : ''}`}
               data-testid="nav-about"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              About {!gameState.unlockedSections.includes('about') && '🔒'}
+              About
             </motion.a>
             
             <motion.a 
               href="#achievements" 
-              className={`navbar-link ${gameState.currentSection === 'achievements' ? 'active' : ''} ${!gameState.unlockedSections.includes('achievements') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'achievements' ? 'active' : ''}`}
               data-testid="nav-achievements"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Achievements {!gameState.unlockedSections.includes('achievements') && '🔒'}
+              Achievements
             </motion.a>
             
             <motion.a 
               href="#projects" 
-              className={`navbar-link ${gameState.currentSection === 'projects' ? 'active' : ''} ${!gameState.unlockedSections.includes('projects') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'projects' ? 'active' : ''}`}
               data-testid="nav-projects"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Projects {!gameState.unlockedSections.includes('projects') && '🔒'}
+              Projects
             </motion.a>
             
             <motion.a 
               href="#contact" 
-              className={`navbar-link ${gameState.currentSection === 'contact' ? 'active' : ''} ${!gameState.unlockedSections.includes('contact') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'contact' ? 'active' : ''}`}
               data-testid="nav-contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Contact {!gameState.unlockedSections.includes('contact') && '🔒'}
+              Contact
             </motion.a>
             
             <motion.a 
               href="#skills" 
-              className={`navbar-link ${gameState.currentSection === 'skills' ? 'active' : ''} ${!gameState.unlockedSections.includes('skills') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'skills' ? 'active' : ''}`}
               data-testid="nav-skills"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Skills {!gameState.unlockedSections.includes('skills') && '🔒'}
+              Skills
             </motion.a>
             
             <motion.a 
               href="#japan-dream" 
-              className={`navbar-link ${gameState.currentSection === 'japan-dream' ? 'active' : ''} ${!gameState.unlockedSections.includes('japan-dream') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'japan-dream' ? 'active' : ''}`}
               data-testid="nav-japan-dream"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Japan Dream {!gameState.unlockedSections.includes('japan-dream') && '🔒'}
+              Japan Dream
             </motion.a>
             
             <motion.a 
               href="#guestbook" 
-              className={`navbar-link ${gameState.currentSection === 'guestbook' ? 'active' : ''} ${!gameState.unlockedSections.includes('guestbook') ? 'opacity-50' : ''}`}
+              className={`navbar-link ${currentSection === 'guestbook' ? 'active' : ''}`}
               data-testid="nav-guestbook"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Guestbook {!gameState.unlockedSections.includes('guestbook') && '🔒'}
+              Guestbook
             </motion.a>
               
               {/* Instagram Link */}
@@ -568,9 +524,7 @@ export default function Home() {
       {/* About Section - Enhanced */}
       <section 
         id="about" 
-        className={`py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('about') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300"
         data-testid="about-section"
       >
         <div className="max-w-5xl mx-auto px-4">
@@ -618,9 +572,7 @@ export default function Home() {
       {/* Achievements Timeline */}
       <section 
         id="achievements" 
-        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('achievements') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
         data-testid="achievements-section"
       >
         <div className="max-w-6xl mx-auto px-4">
@@ -762,9 +714,7 @@ export default function Home() {
       {/* Projects */}
       <section 
         id="projects" 
-        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('projects') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
         data-testid="projects-section"
       >
         <div className="max-w-6xl mx-auto px-4">
@@ -800,9 +750,7 @@ export default function Home() {
       {/* Contact Form */}
       <section 
         id="contact" 
-        className={`py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('contact') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300"
         data-testid="contact-section"
       >
         <div className="max-w-2xl mx-auto px-4">
@@ -917,9 +865,7 @@ export default function Home() {
       {/* Skills Inventory Section */}
       <section 
         id="skills" 
-        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('skills') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
         data-testid="skills-section"
       >
         <SkillsInventory />
@@ -928,9 +874,7 @@ export default function Home() {
       {/* Japan Dream Section */}
       <section 
         id="japan-dream" 
-        className={`py-32 fade-in-section scroll-reveal transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('japan-dream') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="py-32 fade-in-section scroll-reveal transition-colors duration-300"
         data-testid="japan-dream-section"
       >
         <JapanDream />
@@ -938,9 +882,7 @@ export default function Home() {
 
       {/* Guestbook Section */}
       <div 
-        className={`scroll-reveal transition-colors duration-300 ${
-          !gameState.unlockedSections.includes('guestbook') ? 'section-locked' : 'section-unlocked'
-        }`}
+        className="scroll-reveal transition-colors duration-300"
         id="guestbook"
       >
         <Guestbook />
