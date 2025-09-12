@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Shadows+Into+Light&family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&family=Patrick+Hand&family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -3341,23 +3341,195 @@ html {
   font-weight: bold;
 }
 
-/* Sketchy Neo-Brutalism Design System */
+/* Sketchy Doodle Design System */
 body {
-  background: var(--background);
-  font-family: var(--font-clean);
-  color: var(--foreground);
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(112, 218, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(247, 0, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(255, 236, 0, 0.05) 0%, transparent 50%);
-  background-attachment: fixed;
+  background: #fdfdfd;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  line-height: 1.6;
 }
 
-/* Paper Texture Background */
-.paper-texture {
-  background: var(--background);
-  background-image: 
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+/* Custom Font Classes */
+.font-shadows {
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.font-patrick {
+  font-family: 'Patrick Hand', cursive;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Sketchy Card Styles */
+.sketchy-card {
+  background: #fdfdfd;
+  border: 3px solid #1a1a1a;
+  border-radius: 0;
+  position: relative;
+  transform: rotate(-0.5deg);
+  box-shadow: 
+    6px 6px 0px #1a1a1a,
+    12px 12px 0px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.sketchy-card:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 
+    8px 8px 0px #1a1a1a,
+    16px 16px 0px rgba(0,0,0,0.1);
+}
+
+.sketchy-card::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #70D6FF, #FF00FF, #FFD600);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sketchy-card:hover::before {
+  opacity: 0.3;
+}
+
+/* Sketchy Tag Styles */
+.sketchy-tag {
+  background: #00D6A3;
+  color: #1a1a1a;
+  border: 2px solid #1a1a1a;
+  padding: 4px 12px;
+  font-family: 'Patrick Hand', cursive;
+  font-weight: bold;
+  transform: rotate(-2deg);
+  transition: all 0.3s ease;
+  display: inline-block;
+  font-size: 0.875rem;
+}
+
+.sketchy-tag:hover {
+  transform: rotate(0deg) scale(1.1);
+  background: #70D6FF;
+  box-shadow: 3px 3px 0px #1a1a1a;
+}
+
+/* Hand-drawn Button Styles */
+.sketchy-button {
+  background: #fdfdfd;
+  border: 3px solid #1a1a1a;
+  border-radius: 0;
+  font-family: 'Patrick Hand', cursive;
+  font-weight: bold;
+  color: #1a1a1a;
+  padding: 12px 24px;
+  position: relative;
+  transform: rotate(-1deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.sketchy-button:hover {
+  transform: rotate(0deg) scale(1.05);
+  background: #FFD600;
+  border-color: #70D6FF;
+  box-shadow: 4px 4px 0px #1a1a1a;
+}
+
+.sketchy-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #70D6FF, transparent);
+  transition: left 0.5s ease;
+}
+
+.sketchy-button:hover::before {
+  left: 100%;
+}
+
+/* Wiggle Animation */
+.wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  25% { transform: rotate(1deg); }
+  50% { transform: rotate(-0.5deg); }
+  75% { transform: rotate(0.5deg); }
+}
+
+/* Doodle Underline Animation */
+.doodle-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.doodle-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: #FF4900;
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.doodle-underline:hover::after {
+  width: 100%;
+  background: linear-gradient(90deg, #FF4900, #70D6FF, #FF00FF);
+}
+
+/* Spring Animations */
+.spring-bounce {
+  animation: spring-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes spring-bounce {
+  0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+  50% { transform: scale(1.05) rotate(2deg); }
+  70% { transform: scale(0.9) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #70D6FF;
 }
 
 /* Sketchy Typography */
