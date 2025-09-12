@@ -461,63 +461,132 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative creative-background hero-section scroll-reveal" data-testid="hero-section">
-        {/* Particle System */}
-        {[...Array(15)].map((_, i) => (
-          <div 
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 15}s`,
-              animationDuration: `${15 + Math.random() * 10}s`
-            }}
-          />
-        ))}
-        
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          {/* Enhanced Floating doodle elements */}
-          <div className="absolute top-10 left-10 text-4xl opacity-30 parallax interactive-doodle" data-testid="doodle-star">⭐</div>
-          <div className="absolute top-20 right-20 text-3xl opacity-35 parallax interactive-doodle" data-testid="doodle-arrow">→</div>
-          <div className="absolute bottom-32 left-20 text-2xl opacity-40 parallax interactive-doodle" data-testid="doodle-sparkle">✨</div>
-          <div className="absolute top-40 right-10 text-2xl opacity-25 parallax interactive-doodle">🚀</div>
-          <div className="absolute bottom-40 right-32 text-3xl opacity-30 parallax interactive-doodle">💡</div>
-          
-          {/* Main headline */}
-          <h1 className="font-handwritten creative-title text-7xl md:text-9xl font-bold mb-8 relative" data-testid="main-headline">
-            Hi, I'm <span className="interactive-doodle">👋</span>
-            <span className="relative inline-block creative-text">
-              Satyajit
-              <svg className="absolute -bottom-6 left-0 w-full h-8" viewBox="0 0 400 20" data-testid="headline-underline">
-                <path d="M10,15 Q100,5 200,12 T380,15" stroke="#333" strokeWidth="4" fill="none" 
-                      strokeDasharray="8,4" className="animate-sketch-draw"/>
-              </svg>
-            </span>
-          </h1>
-          
-          {/* Typewriter animation */}
-          <div className="h-16 mb-12" data-testid="typewriter-container">
-            <p className="font-sketch text-3xl md:text-4xl text-gray-700 dark:text-gray-300 creative-text">
-              {typewriterText}
-              <span className="animate-pulse creative-glow">|</span>
-            </p>
-          </div>
-          
-          {/* Scroll indicator */}
-          <div className="animate-bounce mt-16" data-testid="scroll-indicator">
-            <svg width="40" height="40" viewBox="0 0 40 40" className="mx-auto opacity-60">
-              <path d="M20,5 Q18,15 20,25 Q22,15 20,5" stroke="#333" strokeWidth="2" fill="none"/>
-              <path d="M15,20 Q20,28 25,20" stroke="#333" strokeWidth="2" fill="none"/>
-            </svg>
-          </div>
-        </div>
+      {/* Desktop Hero Section */}
+      <section 
+        id="home" 
+        className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-8"
+        data-testid="hero-section"
+      >
+        <div className="w-full max-w-6xl">
+          {/* Desktop Window */}
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Window Header */}
+            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              </div>
+              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
+                Portfolio.exe
+              </div>
+              <div className="w-16"></div>
+            </div>
 
-        {/* Hand-drawn divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg width="100%" height="40" viewBox="0 0 1200 40" className="opacity-30">
-            <path d="M0,20 Q300,10 600,25 T1200,20" stroke="#333" strokeWidth="2" fill="none" strokeDasharray="5,5"/>
-          </svg>
+            {/* Window Content */}
+            <div className="p-12">
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <h1 className="font-mono text-4xl md:text-6xl font-bold mb-4 text-gray-900 dark:text-white transition-colors duration-300">
+                  welcome to my
+                </h1>
+                <h1 className="font-mono text-4xl md:text-6xl font-bold mb-8 text-gray-900 dark:text-white transition-colors duration-300">
+                  portfolio.
+                </h1>
+                <div className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-mono mb-8">
+                  <span className="inline-block min-h-[2rem]">
+                    {typewriterText}
+                    <span className="animate-pulse">|</span>
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Desktop Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* About Card */}
+                <motion.div
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 transition-colors duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">About Me</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                    AI Innovator & Developer passionate about building the future. Currently pursuing dreams in Japan 🇯🇵
+                  </p>
+                  <a href="#about" className="text-blue-500 hover:text-blue-600 font-mono text-sm">
+                    Read More →
+                  </a>
+                </motion.div>
+
+                {/* Projects Card */}
+                <motion.div
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-green-400 transition-colors duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">Projects</h3>
+                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                    <div>• LensAI - AI Platform</div>
+                    <div>• Inforvi - Data Viz</div>
+                    <div>• ORLON.OG - OSINT</div>
+                  </div>
+                  <a href="#projects" className="text-green-500 hover:text-green-600 font-mono text-sm">
+                    View All →
+                  </a>
+                </motion.div>
+
+                {/* Resume Card */}
+                <motion.div
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-purple-400 transition-colors duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">Resume</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                    Download my latest resume
+                  </p>
+                  <a href="#" className="text-purple-500 hover:text-purple-600 font-mono text-sm">
+                    Resume.pdf ↓
+                  </a>
+                </motion.div>
+              </div>
+
+              {/* To Do List */}
+              <motion.div
+                className="mt-12 bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+              >
+                <h3 className="font-mono text-lg font-bold mb-4 text-gray-900 dark:text-white">To do:</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-300">
+                  <div>• Land my dream AI job</div>
+                  <div>• Master Japanese language</div>
+                  <div>• Move to Japan</div>
+                  <div>• Build revolutionary AI tools</div>
+                  <div>• Contribute to open source</div>
+                  <div>• Travel the world</div>
+                  <div>• Master OSINT techniques</div>
+                  <div>• Create amazing projects</div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -711,53 +780,94 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects */}
+      {/* Projects - Desktop Style */}
       <section 
         id="projects" 
-        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
+        className="py-32 fade-in-section scroll-reveal bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         data-testid="projects-section"
       >
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="projects-title">
-            Projects
-            <div className="absolute -top-6 -right-16 text-3xl animate-float">🚀</div>
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8" data-testid="projects-grid">
-            {projects.map((project, index) => (
-              <motion.div 
-                key={index} 
-                className="project-card" 
-                data-testid={`project-${index}`}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="nb-border p-8 h-full bg-white dark:bg-gray-800">
-                  <h3 className="font-handwritten text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">{project.title}</h3>
-                  <p className="font-clean text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{project.description}</p>
-                  <div className="mt-auto">
-                    <p className="font-sketch text-sm text-gray-500 dark:text-gray-400">{project.tech}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Window Header */}
+            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              </div>
+              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
+                Projects.exe
+              </div>
+              <div className="w-16"></div>
+            </div>
+
+            {/* Window Content */}
+            <div className="p-8">
+              <h2 className="font-mono text-3xl font-bold mb-8 text-gray-900 dark:text-white" data-testid="projects-title">
+                My Projects
+              </h2>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="projects-grid">
+                {projects.map((project, index) => (
+                  <motion.div 
+                    key={index} 
+                    className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 transition-colors duration-300"
+                    data-testid={`project-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">{project.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">{project.description}</p>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-mono mb-3">{project.tech}</div>
+                    <a href="#" className="text-blue-500 hover:text-blue-600 font-mono text-sm">
+                      View Project →
+                    </a>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Contact Form */}
+      {/* Contact Form - Desktop Style */}
       <section 
         id="contact" 
-        className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300"
+        className="py-32 bg-gray-100 dark:bg-gray-900 fade-in-section scroll-reveal transition-colors duration-300"
         data-testid="contact-section"
       >
-        <div className="max-w-2xl mx-auto px-4">
-          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="contact-title">
-            Let's Connect
-            <div className="absolute -top-4 -right-16 text-3xl animate-float">📮</div>
-          </h2>
+        <div className="max-w-4xl mx-auto px-4">
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Window Header */}
+            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              </div>
+              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
+                Contact.exe
+              </div>
+              <div className="w-16"></div>
+            </div>
+
+            {/* Window Content */}
+            <div className="p-8">
+              <h2 className="font-mono text-3xl font-bold mb-8 text-gray-900 dark:text-white text-center" data-testid="contact-title">
+                Let's Connect
+              </h2>
           
           <motion.form 
             onSubmit={handleFormSubmit} 
@@ -858,6 +968,8 @@ export default function Home() {
                 <Instagram className="w-6 h-6 text-gray-900 dark:text-gray-100" />
               </div>
             </motion.a>
+          </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
