@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Github, Instagram, Linkedin, Book, Mail, Play, Pause, Send, Moon, Sun, Volume2, ArrowUp } from "lucide-react";
 import Guestbook from "@/components/Guestbook";
+import { GameProgress } from "@/components/ui/game-progress";
+import { CharacterAvatar } from "@/components/ui/character-avatar";
+import { AchievementPopup } from "@/components/ui/achievement-popup";
+import { LevelUpAnimation } from "@/components/ui/level-up-animation";
+import { useGamification } from "@/hooks/use-gamification";
 
 export default function Home() {
   const [currentHobby, setCurrentHobby] = useState(0);
@@ -14,6 +20,16 @@ export default function Home() {
     email: "",
     message: ""
   });
+
+  // Gamification hook
+  const {
+    gameState,
+    unlockSection,
+    addXp,
+    setCurrentSection,
+    closeAchievement,
+    closeLevelUp
+  } = useGamification();
 
   const hobbies = [
     "Coding 💻",
@@ -74,7 +90,7 @@ export default function Home() {
       setCurrentHobby((prev) => (prev + 1) % hobbies.length);
     }, 2500);
 
-    // Enhanced scroll-based animations with progress tracking
+    // Enhanced scroll-based animations with progress tracking and section unlocking
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
       const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -82,6 +98,28 @@ export default function Home() {
       
       setScrollProgress(progress);
       setShowScrollTop(scrolled > 500);
+      
+      // Section unlocking based on scroll position
+      const sections = [
+        { id: 'about', element: document.getElementById('about') },
+        { id: 'achievements', element: document.getElementById('achievements') },
+        { id: 'projects', element: document.getElementById('projects') },
+        { id: 'contact', element: document.getElementById('contact') },
+        { id: 'guestbook', element: document.getElementById('guestbook') }
+      ];
+
+      sections.forEach(({ id, element }) => {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
+          
+          if (isVisible && !gameState.unlockedSections.includes(id)) {
+            unlockSection(id);
+            setCurrentSection(id);
+            addXp(50); // XP for discovering a section
+          }
+        }
+      });
       
       // Smooth parallax effects
       const parallaxElements = document.querySelectorAll('.parallax');
@@ -92,8 +130,8 @@ export default function Home() {
       });
       
       // Advanced scroll effects for sections
-      const sections = document.querySelectorAll('.scroll-reveal');
-      sections.forEach((section, index) => {
+      const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+      scrollRevealElements.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
         const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
         
@@ -212,82 +250,150 @@ export default function Home() {
 
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-clean overflow-x-hidden transition-colors duration-300 relative">
-      {/* Scroll Progress Bar */}
-      <div 
-        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-gray-600 to-gray-800 dark:from-gray-400 dark:to-gray-200 z-50 transition-all duration-300 ease-out"
-        style={{ width: `${scrollProgress}%` }}
-        data-testid="scroll-progress"
+      {/* Game Progress Bar */}
+      <GameProgress
+        progress={gameState.progress}
+        level={gameState.level}
+        xp={gameState.xp}
+        maxXp={gameState.maxXp}
+      />
+
+      {/* Character Avatar */}
+      <CharacterAvatar
+        currentSection={gameState.currentSection}
+        isVisible={gameState.unlockedSections.includes(gameState.currentSection)}
+      />
+
+      {/* Achievement Popup */}
+      <AchievementPopup
+        achievement={gameState.currentAchievement}
+        onClose={closeAchievement}
+      />
+
+      {/* Level Up Animation */}
+      <LevelUpAnimation
+        show={gameState.showLevelUp}
+        newLevel={gameState.level}
+        onComplete={closeLevelUp}
       />
       
       {/* Scroll to Top Button */}
       {showScrollTop && (
-        <button
+        <motion.button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full sketch-border hover:scale-110 transition-all duration-300 animate-bounce-subtle shadow-lg"
+          className="fixed bottom-8 right-8 z-50 p-4 nb-button"
           data-testid="scroll-to-top"
           title="Back to top"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
         >
           <ArrowUp className="w-5 h-5" />
-        </button>
+        </motion.button>
       )}
       
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 backdrop-blur-sketch z-40 border-b border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90" data-testid="navigation">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div className="font-handwritten text-xl font-bold sketch-underline text-gray-900 dark:text-gray-100" data-testid="logo">SP</div>
+      {/* Retro Game Navigation */}
+      <nav className="retro-navbar" data-testid="navigation">
+        <div className="navbar-container">
+          <motion.div 
+            className="navbar-logo" 
+            data-testid="logo"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            SP
+          </motion.div>
+          
+          <div className="navbar-links">
+            <motion.a 
+              href="#home" 
+              className={`navbar-link ${gameState.currentSection === 'home' ? 'active' : ''}`}
+              data-testid="nav-home"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Home
+            </motion.a>
             
-            {/* Mobile Dark Mode Toggle */}
-            <div className="md:hidden">
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-full sketch-border hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 creative-theme-toggle"
-                data-testid="mobile-dark-mode-toggle"
-                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {isDarkMode ? (
-                  <Sun className="w-4 h-4 text-yellow-500" />
-                ) : (
-                  <Moon className="w-4 h-4 text-gray-700" />
-                )}
-              </button>
-            </div>
+            <motion.a 
+              href="#about" 
+              className={`navbar-link ${gameState.currentSection === 'about' ? 'active' : ''} ${!gameState.unlockedSections.includes('about') ? 'opacity-50' : ''}`}
+              data-testid="nav-about"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              About {!gameState.unlockedSections.includes('about') && '🔒'}
+            </motion.a>
             
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-home">Home</a>
-              <a href="#about" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-about">About</a>
-              <a href="#achievements" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-achievements">Achievements</a>
-              <a href="#projects" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-projects">Projects</a>
-              <a href="#contact" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-contact">Contact</a>
-              <a href="#guestbook" className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors" data-testid="nav-guestbook">Guestbook</a>
+            <motion.a 
+              href="#achievements" 
+              className={`navbar-link ${gameState.currentSection === 'achievements' ? 'active' : ''} ${!gameState.unlockedSections.includes('achievements') ? 'opacity-50' : ''}`}
+              data-testid="nav-achievements"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Achievements {!gameState.unlockedSections.includes('achievements') && '🔒'}
+            </motion.a>
+            
+            <motion.a 
+              href="#projects" 
+              className={`navbar-link ${gameState.currentSection === 'projects' ? 'active' : ''} ${!gameState.unlockedSections.includes('projects') ? 'opacity-50' : ''}`}
+              data-testid="nav-projects"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Projects {!gameState.unlockedSections.includes('projects') && '🔒'}
+            </motion.a>
+            
+            <motion.a 
+              href="#contact" 
+              className={`navbar-link ${gameState.currentSection === 'contact' ? 'active' : ''} ${!gameState.unlockedSections.includes('contact') ? 'opacity-50' : ''}`}
+              data-testid="nav-contact"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contact {!gameState.unlockedSections.includes('contact') && '🔒'}
+            </motion.a>
+            
+            <motion.a 
+              href="#guestbook" 
+              className={`navbar-link ${gameState.currentSection === 'guestbook' ? 'active' : ''} ${!gameState.unlockedSections.includes('guestbook') ? 'opacity-50' : ''}`}
+              data-testid="nav-guestbook"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Guestbook {!gameState.unlockedSections.includes('guestbook') && '🔒'}
+            </motion.a>
               
               {/* Instagram Link */}
-              <a 
+            <motion.a 
                 href="https://www.instagram.com/4zurit/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="font-clean text-sm hover:text-gray-600 dark:hover:text-gray-300 sketch-underline transition-colors flex items-center space-x-1"
+              className="navbar-link flex items-center space-x-1"
                 data-testid="nav-instagram"
                 title="Follow me on Instagram"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               >
                 <span>📸</span>
                 <span>@4zurit</span>
-              </a>
+            </motion.a>
               
               {/* Dark Mode Toggle */}
-              <button
+            <motion.button
                 onClick={toggleDarkMode}
-                className="p-2 rounded-full sketch-border hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 creative-theme-toggle"
+              className="navbar-link"
                 data-testid="dark-mode-toggle"
                 title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               >
                 {isDarkMode ? (
-                  <Sun className="w-5 h-5 text-yellow-500" />
+                <Sun className="w-5 h-5" />
                 ) : (
-                  <Moon className="w-5 h-5 text-gray-700" />
+                <Moon className="w-5 h-5" />
                 )}
-              </button>
-            </div>
+            </motion.button>
           </div>
         </div>
       </nav>
@@ -353,7 +459,13 @@ export default function Home() {
       </section>
 
       {/* About Section - Enhanced */}
-      <section id="about" className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="about-section">
+      <section 
+        id="about" 
+        className={`py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('about') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="about-section"
+      >
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="about-title-enhanced text-center" data-testid="about-title">
@@ -397,7 +509,13 @@ export default function Home() {
       </section>
 
       {/* Achievements Timeline */}
-      <section id="achievements" className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="achievements-section">
+      <section 
+        id="achievements" 
+        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('achievements') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="achievements-section"
+      >
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="achievements-title">
             Achievements
@@ -409,17 +527,33 @@ export default function Home() {
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300 timeline-line"></div>
             
             {achievements.map((achievement, index) => (
-              <div key={index} className={`flex items-center mb-16 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`} data-testid={`achievement-${index}`}>
+              <motion.div 
+                key={index} 
+                className={`flex items-center mb-16 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`} 
+                data-testid={`achievement-${index}`}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.3 }}
+              >
                 <div className={`timeline-item ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'} max-w-md`}>
-                  <div className="sketch-card p-6 hover:scale-105 transition-all duration-300">
+                  <motion.div 
+                    className="nb-border p-6 bg-white dark:bg-gray-800"
+                    whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
                     <div className="flex items-center mb-4">
-                      <div className="text-3xl mr-4 achievement-icon">{achievement.icon}</div>
-                      <h3 className="font-handwritten text-2xl font-bold">{achievement.title}</h3>
+                      <motion.div 
+                        className="text-3xl mr-4 achievement-icon"
+                        whileHover={{ scale: 1.3, rotate: 10 }}
+                      >
+                        {achievement.icon}
+                      </motion.div>
+                      <h3 className="font-handwritten text-2xl font-bold text-gray-900 dark:text-gray-100">{achievement.title}</h3>
                     </div>
-                    <p className="font-clean text-gray-600">{achievement.detail}</p>
-                  </div>
+                    <p className="font-clean text-gray-600 dark:text-gray-300">{achievement.detail}</p>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -433,25 +567,45 @@ export default function Home() {
           </h2>
           
           {/* Cycling hobbies animation */}
-          <div className="mb-16" data-testid="cycling-hobbies">
-            <div className="sketch-card p-8 inline-block">
-              <p className="font-sketch text-3xl transition-all duration-500 hobby-cycling">
+          <motion.div 
+            className="mb-16" 
+            data-testid="cycling-hobbies"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div 
+              className="nb-border p-8 inline-block bg-white dark:bg-gray-800"
+              whileHover={{ scale: 1.05, rotate: 2 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <p className="font-sketch text-3xl transition-all duration-500 hobby-cycling text-gray-900 dark:text-gray-100">
                 {hobbies[currentHobby]}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
           {/* Enhanced Music Player */}
-          <div className="creative-music-player mx-auto" data-testid="music-section">
+          <motion.div 
+            className="creative-music-player mx-auto" 
+            data-testid="music-section"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             <div className="music-player-container">
               <div className="music-player-header">
-                <h3 className="font-artistic text-3xl font-bold text-center mb-2 music-title">
+                <h3 className="font-artistic text-3xl font-bold text-center mb-2 music-title text-gray-900 dark:text-gray-100">
                   Now Playing
                   <div className="musical-notes">♪ ♫ ♪</div>
                 </h3>
               </div>
               
-              <div className="music-player-card">
+              <motion.div 
+                className="music-player-card nb-border bg-white dark:bg-gray-800"
+                whileHover={{ scale: 1.02, rotate: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
                 <div className="music-info-section">
                   <div className="song-artwork">
                     <div className="vinyl-record">
@@ -476,7 +630,7 @@ export default function Home() {
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
-                    className="sketch-border"
+                    className="nb-border"
                   ></iframe>
                 </div>
                 
@@ -492,14 +646,20 @@ export default function Home() {
                     <Volume2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Projects */}
-      <section id="projects" className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="projects-section">
+      <section 
+        id="projects" 
+        className={`py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('projects') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="projects-section"
+      >
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="projects-title">
             Projects
@@ -508,97 +668,152 @@ export default function Home() {
           
           <div className="grid md:grid-cols-3 gap-8" data-testid="projects-grid">
             {projects.map((project, index) => (
-              <div key={index} className="project-card" data-testid={`project-${index}`}>
-                <div className="sketch-card p-8 h-full hover:scale-105 transition-all duration-300">
-                  <h3 className="font-handwritten text-3xl font-bold mb-4">{project.title}</h3>
-                  <p className="font-clean text-gray-600 mb-6 leading-relaxed">{project.description}</p>
+              <motion.div 
+                key={index} 
+                className="project-card" 
+                data-testid={`project-${index}`}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="nb-border p-8 h-full bg-white dark:bg-gray-800">
+                  <h3 className="font-handwritten text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">{project.title}</h3>
+                  <p className="font-clean text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{project.description}</p>
                   <div className="mt-auto">
-                    <p className="font-sketch text-sm text-gray-500">{project.tech}</p>
+                    <p className="font-sketch text-sm text-gray-500 dark:text-gray-400">{project.tech}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Contact Form */}
-      <section id="contact" className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="contact-section">
+      <section 
+        id="contact" 
+        className={`py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('contact') ? 'section-locked' : 'section-unlocked'
+        }`}
+        data-testid="contact-section"
+      >
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="contact-title">
             Let's Connect
             <div className="absolute -top-4 -right-16 text-3xl animate-float">📮</div>
           </h2>
           
-          <form onSubmit={handleFormSubmit} className="sketch-card p-12" data-testid="contact-form">
+          <motion.form 
+            onSubmit={handleFormSubmit} 
+            className="nb-border p-12" 
+            data-testid="contact-form"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="space-y-8">
               <div>
-                <label className="font-handwritten text-xl block mb-3">Name</label>
-                <input
+                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Name</label>
+                <motion.input
                   type="text"
                   value={contactForm.name}
                   onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
-                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none"
                   data-testid="contact-name"
+                  whileFocus={{ scale: 1.02 }}
                 />
               </div>
               
               <div>
-                <label className="font-handwritten text-xl block mb-3">Email</label>
-                <input
+                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Email</label>
+                <motion.input
                   type="email"
                   value={contactForm.email}
                   onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
-                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none"
                   data-testid="contact-email"
+                  whileFocus={{ scale: 1.02 }}
                 />
               </div>
               
               <div>
-                <label className="font-handwritten text-xl block mb-3">Message</label>
-                <textarea
+                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Message</label>
+                <motion.textarea
                   value={contactForm.message}
                   onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
                   rows={5}
-                  className="w-full p-4 sketch-border bg-white font-clean text-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none resize-none"
                   data-testid="contact-message"
+                  whileFocus={{ scale: 1.02 }}
                 />
               </div>
               
-              <button
+              <motion.button
                 type="submit"
-                className="w-full sketch-border p-4 bg-gray-900 text-white font-handwritten text-xl hover:bg-gray-700 transition-all duration-300 flex items-center justify-center space-x-3"
+                className="w-full nb-button p-4 font-handwritten text-xl flex items-center justify-center space-x-3"
                 data-testid="contact-submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <span>Send Message</span>
                 <Send className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
-          </form>
+          </motion.form>
           
           {/* Social Links */}
-          <div className="flex justify-center space-x-8 mt-12" data-testid="social-links">
-            <a href="#" className="social-icon" data-testid="link-github">
-              <div className="sketch-border w-16 h-16 flex items-center justify-center">
-                <Github className="w-6 h-6" />
+          <motion.div 
+            className="flex justify-center space-x-8 mt-12" 
+            data-testid="social-links"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <motion.a 
+              href="#" 
+              className="social-icon" 
+              data-testid="link-github"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
+                <Github className="w-6 h-6 text-gray-900 dark:text-gray-100" />
               </div>
-            </a>
-            <a href="#" className="social-icon" data-testid="link-linkedin">
-              <div className="sketch-border w-16 h-16 flex items-center justify-center">
-                <Linkedin className="w-6 h-6" />
+            </motion.a>
+            <motion.a 
+              href="#" 
+              className="social-icon" 
+              data-testid="link-linkedin"
+              whileHover={{ scale: 1.1, rotate: -5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
+                <Linkedin className="w-6 h-6 text-gray-900 dark:text-gray-100" />
               </div>
-            </a>
-            <a href="#" className="social-icon" data-testid="link-instagram">
-              <div className="sketch-border w-16 h-16 flex items-center justify-center">
-                <Instagram className="w-6 h-6" />
+            </motion.a>
+            <motion.a 
+              href="#" 
+              className="social-icon" 
+              data-testid="link-instagram"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
+                <Instagram className="w-6 h-6 text-gray-900 dark:text-gray-100" />
               </div>
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </div>
       </section>
 
       {/* Guestbook Section */}
-      <div className="scroll-reveal transition-colors duration-300">
+      <div 
+        className={`scroll-reveal transition-colors duration-300 ${
+          !gameState.unlockedSections.includes('guestbook') ? 'section-locked' : 'section-unlocked'
+        }`}
+        id="guestbook"
+      >
         <Guestbook />
       </div>
 
