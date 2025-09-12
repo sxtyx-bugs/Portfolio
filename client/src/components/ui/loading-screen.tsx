@@ -29,142 +29,147 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinish }) => {
     onFinish();
   };
 
-  // Auto-finish after 8 seconds as fallback
+  // Auto-finish after 6 seconds as fallback
   useEffect(() => {
     const fallbackTimer = setTimeout(() => {
       onFinish();
-    }, 8000);
+    }, 6000);
 
     return () => clearTimeout(fallbackTimer);
   }, [onFinish]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#fdfdfd]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Background with gradient and glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-        {/* Subtle pink/blue glow effects */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-pink-500/10 via-transparent to-blue-500/10" />
-        <div className="absolute inset-0 bg-gradient-to-bl from-blue-500/5 via-transparent to-pink-500/5" />
-        
-        {/* Animated background particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-pink-400/30 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.3, 1, 0.3],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-5 text-3xl opacity-20 animate-bounce" style={{ animationDelay: '0s' }}>✨</div>
+        <div className="absolute top-20 right-10 text-2xl opacity-20 animate-bounce" style={{ animationDelay: '1s' }}>⭐</div>
+        <div className="absolute top-60 left-8 text-xl opacity-20 animate-bounce" style={{ animationDelay: '2s' }}>💫</div>
+        <div className="absolute top-80 right-5 text-2xl opacity-20 animate-bounce" style={{ animationDelay: '3s' }}>🌟</div>
+        <div className="absolute bottom-40 left-10 text-xl opacity-20 animate-bounce" style={{ animationDelay: '4s' }}>🎨</div>
+        <div className="absolute bottom-20 right-8 text-2xl opacity-20 animate-bounce" style={{ animationDelay: '5s' }}>🚀</div>
+        <div className="absolute top-1/2 left-1/4 text-lg opacity-20 animate-bounce" style={{ animationDelay: '0.5s' }}>💻</div>
+        <div className="absolute top-1/3 right-1/4 text-lg opacity-20 animate-bounce" style={{ animationDelay: '1.5s' }}>🤖</div>
       </div>
 
       {/* Main content */}
       <div className="relative z-10 text-center space-y-8">
-        {/* Retro-style name with pulsing animation */}
-        <motion.h1
-          className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400"
-          style={{
-            fontFamily: 'monospace',
-            textShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
-            letterSpacing: '0.1em',
-          }}
-          animate={{
-            scale: [1, 1.05, 1],
-            textShadow: [
-              '0 0 20px rgba(255, 255, 255, 0.5)',
-              '0 0 30px rgba(255, 255, 255, 0.8)',
-              '0 0 20px rgba(255, 255, 255, 0.5)',
-            ],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        {/* Sketchy name with doodle animation */}
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          SATYAJIT
-        </motion.h1>
+          <motion.h1
+            className="text-6xl md:text-8xl font-shadows text-black"
+            animate={{
+              rotate: [0, 1, -1, 0],
+              scale: [1, 1.02, 1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            hey, i'm satyajit 👋
+          </motion.h1>
+          
+          {/* Doodle underline */}
+          <motion.svg
+            className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-96 h-8"
+            viewBox="0 0 400 20"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, delay: 0.5 }}
+          >
+            <path
+              d="M20,15 Q100,5 180,12 T360,8 T400,10"
+              stroke="#FF4900"
+              strokeWidth="4"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </motion.svg>
+        </motion.div>
 
-        {/* Progress bar container */}
-        <div className="w-80 mx-auto space-y-4">
-          {/* Progress bar */}
-          <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden border-2 border-gray-600 shadow-inner">
+        {/* Sketchy progress container */}
+        <motion.div 
+          className="w-80 mx-auto space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          {/* Progress bar with sketchy border */}
+          <div className="relative h-4 border-3 border-black bg-[#fdfdfd] transform rotate-1">
             <motion.div
-              className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 rounded-full shadow-lg"
+              className="h-full bg-gradient-to-r from-[#70D6FF] via-[#FFD600] to-[#FF4900]"
               style={{ width: `${progress}%` }}
               transition={{ duration: 0.3, ease: "easeOut" }}
             />
-            {/* Shimmer effect */}
+            {/* Doodle progress indicator */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-              animate={{ x: ['-100%', '100%'] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              className="absolute -top-2 -right-2 w-6 h-6 bg-[#FF00FF] border-2 border-black transform rotate-12"
+              style={{ left: `${progress}%` }}
+              animate={{ rotate: [12, 15, 12] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
             />
           </div>
 
-          {/* Progress percentage */}
+          {/* Progress percentage with sketchy styling */}
           <motion.div
-            className="text-2xl font-bold text-white"
-            style={{ fontFamily: 'monospace' }}
-            animate={{ scale: [1, 1.1, 1] }}
+            className="text-2xl font-patrick text-black"
+            animate={{ 
+              scale: [1, 1.1, 1],
+              rotate: [0, 2, 0]
+            }}
             transition={{ duration: 0.5, repeat: Infinity }}
           >
             {progress}%
           </motion.div>
-        </div>
+        </motion.div>
 
-        {/* Start button */}
+        {/* Sketchy start button */}
         <motion.button
-          className={`px-8 py-4 bg-gradient-to-r from-pink-500 to-blue-500 text-white font-bold text-xl rounded-lg shadow-2xl border-2 border-white/20 transition-all duration-300 hover:shadow-pink-500/25 hover:scale-105 active:scale-95 ${
+          className={`sketchy-button text-lg px-8 py-4 ${
             showStartButton ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ fontFamily: 'monospace' }}
           initial={{ opacity: 0, y: 20 }}
           animate={showStartButton ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          whileHover={{
-            scale: 1.05,
-            boxShadow: '0 0 30px rgba(255, 255, 255, 0.3)',
+          whileHover={{ 
+            scale: 1.05, 
+            rotate: 2,
+            backgroundColor: '#FFD600'
           }}
           whileTap={{ scale: 0.95 }}
           onClick={handleStart}
         >
-          PRESS START TO CONTINUE ▶
+          let's start the journey! 🚀
         </motion.button>
 
-        {/* Loading dots */}
-        <motion.div className="flex justify-center space-x-2">
+        {/* Sketchy loading dots */}
+        <motion.div 
+          className="flex justify-center space-x-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="w-2 h-2 bg-pink-400 rounded-full"
+              className="w-3 h-3 border-2 border-black bg-[#00D6A3] transform rotate-12"
               animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.5, 1, 0.5],
+                scale: [1, 1.3, 1],
+                rotate: [12, 15, 12],
+                backgroundColor: ['#00D6A3', '#70D6FF', '#00D6A3']
               }}
               transition={{
                 duration: 1,
@@ -175,14 +180,14 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinish }) => {
           ))}
         </motion.div>
 
-        {/* Skip hint */}
+        {/* Sketchy skip hint */}
         <motion.p
-          className="text-gray-400 text-sm"
+          className="font-inter text-gray-600 text-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.6 }}
-          transition={{ delay: 3 }}
+          transition={{ delay: 2 }}
         >
-          Click anywhere or press Enter to continue
+          click anywhere to skip • or just wait a moment
         </motion.p>
       </div>
 
