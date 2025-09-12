@@ -20,7 +20,6 @@ export default function Home() {
   // New state for enhanced features
   const [showLoading, setShowLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState('home');
-  const [sectionTransition, setSectionTransition] = useState(false);
   const [dynamicQuote, setDynamicQuote] = useState('');
   const [completedGoals, setCompletedGoals] = useState(new Set());
 
@@ -146,7 +145,6 @@ export default function Home() {
         { id: 'achievements', element: document.getElementById('achievements') },
         { id: 'projects', element: document.getElementById('projects') },
         { id: 'skills', element: document.getElementById('skills') },
-        { id: 'japan-dream', element: document.getElementById('japan-dream') },
         { id: 'guestbook', element: document.getElementById('guestbook') },
         { id: 'contact', element: document.getElementById('contact') }
       ];
@@ -156,13 +154,8 @@ export default function Home() {
           const rect = element.getBoundingClientRect();
           const isVisible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
           
-          if (isVisible && currentSection !== id) {
-            // Trigger section transition
-            setSectionTransition(true);
-            setTimeout(() => {
-              setCurrentSection(id);
-              setSectionTransition(false);
-            }, 300);
+          if (isVisible) {
+            setCurrentSection(id);
           }
         }
       });
@@ -340,18 +333,6 @@ export default function Home() {
         transition={{ duration: 0.1 }}
       />
 
-      {/* Section Transition Overlay */}
-      <AnimatePresence>
-        {sectionTransition && (
-          <motion.div
-            className="fixed inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 z-40 pointer-events-none"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.2 }}
-            transition={{ duration: 0.3 }}
-          />
-        )}
-      </AnimatePresence>
 
       {/* Enhanced Scroll to Top Button */}
       {showScrollTop && (
@@ -400,7 +381,6 @@ export default function Home() {
                 { href: '#achievements', label: 'Achievements', id: 'achievements' },
                 { href: '#projects', label: 'Projects', id: 'projects' },
                 { href: '#skills', label: 'Skills', id: 'skills' },
-                { href: '#japan-dream', label: 'Japan Dream', id: 'japan-dream' },
                 { href: '#guestbook', label: 'Guestbook', id: 'guestbook' },
                 { href: '#contact', label: 'Contact', id: 'contact' }
               ].map((link, index) => (
@@ -472,7 +452,7 @@ export default function Home() {
             >
               <div className="sketch-card w-16 h-16 flex items-center justify-center bg-cyan-400">
                 <div className="w-8 h-8 bg-black"></div>
-              </div>
+            </div>
               <p className="text-xs text-center mt-2 text-black font-medium sketch-text">About Me</p>
             </motion.div>
           </div>
@@ -521,8 +501,8 @@ export default function Home() {
               <div>• Create amazing projects</div>
           </div>
           </motion.div>
-        </div>
-
+          </div>
+          
         {/* Central Sketchy Title */}
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
@@ -542,7 +522,7 @@ export default function Home() {
             >
               portfolio.
             </motion.div>
-        </div>
+          </div>
         </div>
 
         {/* Sketchy Dock */}
@@ -584,7 +564,7 @@ export default function Home() {
             >
               <div className="w-6 h-6 bg-black"></div>
             </motion.div>
-          </div>
+        </div>
         </motion.div>
 
         {/* Scrollbar */}
@@ -696,7 +676,7 @@ export default function Home() {
                     </motion.div>
                   ))}
                 </div>
-              </div>
+            </div>
             
               <div>
                 <h3 className="sketch-subheading text-2xl mb-4">My Interests</h3>
@@ -732,59 +712,60 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Achievements Timeline */}
+      {/* Sketchy Achievements Section */}
       <section 
         id="achievements" 
-        className="py-32 fade-in-section scroll-reveal bg-white dark:bg-gray-900 transition-colors duration-300"
+        className="py-32 paper-texture transition-colors duration-300"
         data-testid="achievements-section"
       >
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="font-handwritten text-6xl font-bold mb-16 text-center relative" data-testid="achievements-title">
-            Achievements
-            <div className="absolute -top-4 -right-12 text-4xl animate-doodle-bounce">🏆</div>
-          </h2>
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="sketch-heading text-4xl md:text-5xl mb-4" data-testid="achievements-title">
+              My Journey
+            </h2>
+            <p className="sketch-text text-lg">
+              Key milestones and achievements in my development journey
+            </p>
+          </motion.div>
           
-          <div className="relative" data-testid="timeline">
-            {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300 timeline-line"></div>
-            
+          {/* Achievements Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="achievements-grid">
             {achievements.map((achievement, index) => (
-              <motion.div 
-                key={index} 
-                className={`flex items-center mb-16 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`} 
+              <motion.div
+                key={index}
+                className="sketch-card p-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{ scale: 1.05, rotate: 2 }}
                 data-testid={`achievement-${index}`}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.3 }}
               >
-                <div className={`timeline-item ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'} max-w-md`}>
+                <div className="text-center">
                   <motion.div 
-                    className="nb-border p-6 bg-white dark:bg-gray-800"
-                    whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="text-4xl mb-4"
+                    whileHover={{ scale: 1.2, rotate: 10 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <div className="flex items-center mb-4">
-                      <motion.div 
-                        className="text-3xl mr-4 achievement-icon"
-                        whileHover={{ scale: 1.3, rotate: 10 }}
-                      >
-                        {achievement.icon}
-                      </motion.div>
-                      <h3 className="font-handwritten text-2xl font-bold text-gray-900 dark:text-gray-100">{achievement.title}</h3>
-                    </div>
-                    <p className="font-clean text-gray-600 dark:text-gray-300">{achievement.detail}</p>
+                    {achievement.icon}
                   </motion.div>
-                  </div>
+                  <h3 className="sketch-subheading text-xl mb-3">{achievement.title}</h3>
+                  <p className="sketch-text text-sm">{achievement.detail}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Hobbies & Passions */}
-      <section id="hobbies" className="py-32 bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300" data-testid="hobbies-section">
+      {/* Sketchy Hobbies & Passions */}
+      <section id="hobbies" className="py-32 paper-texture transition-colors duration-300" data-testid="hobbies-section">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-handwritten text-6xl font-bold mb-16" data-testid="hobbies-title">
+          <h2 className="sketch-heading text-4xl md:text-5xl mb-16" data-testid="hobbies-title">
             Hobbies & Passions
           </h2>
           
@@ -797,11 +778,11 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <motion.div 
-              className="nb-border p-8 inline-block bg-white dark:bg-gray-800"
+              className="sketch-card p-8 inline-block"
               whileHover={{ scale: 1.05, rotate: 2 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
-              <p className="font-sketch text-3xl transition-all duration-500 hobby-cycling text-gray-900 dark:text-gray-100">
+              <p className="sketch-subheading text-3xl transition-all duration-500 hobby-cycling">
                 {hobbies[currentHobby]}
               </p>
             </motion.div>
@@ -817,14 +798,14 @@ export default function Home() {
           >
             <div className="music-player-container">
               <div className="music-player-header">
-                <h3 className="font-artistic text-3xl font-bold text-center mb-2 music-title text-gray-900 dark:text-gray-100">
+                <h3 className="sketch-subheading text-3xl text-center mb-2 music-title">
                   Now Playing
                   <div className="musical-notes">♪ ♫ ♪</div>
                 </h3>
               </div>
               
               <motion.div 
-                className="music-player-card nb-border bg-white dark:bg-gray-800"
+                className="music-player-card sketch-card"
                 whileHover={{ scale: 1.02, rotate: 1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
@@ -837,8 +818,8 @@ export default function Home() {
                   </div>
                   
                   <div className="song-details">
-                    <h4 className="font-sketch text-xl font-bold text-gray-900 dark:text-gray-100">Zaalima (sped up)</h4>
-                    <p className="font-clean text-sm text-gray-600 dark:text-gray-400">Current favorite track</p>
+                    <h4 className="sketch-subheading text-xl">Zaalima (sped up)</h4>
+                    <p className="sketch-text text-sm">Current favorite track</p>
                   </div>
                 </div>
                 
@@ -944,12 +925,12 @@ export default function Home() {
                       <p className="sketch-text leading-relaxed">
                         {project.description}
                       </p>
-                    </div>
+                  </div>
                     
                     <div className="flex items-center justify-between">
                       <div className="skill-tag text-sm">
                         {project.tech}
-                      </div>
+                </div>
                       <motion.div
                         className="sketch-text font-medium"
                         whileHover={{ x: 5 }}
@@ -957,7 +938,7 @@ export default function Home() {
                       >
                         Hover to flip →
                       </motion.div>
-                    </div>
+              </div>
                   </div>
 
                   {/* Back of Card */}
@@ -1007,10 +988,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section - Enhanced with Scroll Animations */}
+      {/* Sketchy Contact Section */}
       <section 
         id="contact" 
-        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 relative overflow-hidden"
+        className="py-32 paper-texture transition-colors duration-300 relative overflow-hidden"
         data-testid="contact-section"
       >
         {/* Floating Elements */}
@@ -1059,10 +1040,10 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" data-testid="contact-title">
+            <h2 className="sketch-heading text-4xl md:text-5xl mb-4" data-testid="contact-title">
             Let's Connect
           </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="sketch-text text-lg">
               Ready to work together? Let's make something amazing.
             </p>
           </motion.div>
@@ -1076,8 +1057,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Get in touch</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <h3 className="sketch-subheading text-2xl mb-4">Get in touch</h3>
+                <p className="sketch-text leading-relaxed">
                   I'm always interested in new opportunities and exciting projects. 
                   Whether you want to discuss AI, OSINT, or just say hello, I'd love to hear from you.
                 </p>
@@ -1086,43 +1067,43 @@ export default function Home() {
               <div className="space-y-4">
                 <motion.a
                   href="mailto:satyajit@example.com"
-                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
-                  whileHover={{ scale: 1.02 }}
+                  className="sketch-card flex items-center space-x-4 p-4"
+                  whileHover={{ scale: 1.02, rotate: 1 }}
                 >
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <div className="w-12 h-12 bg-cyan-400 flex items-center justify-center">
+                    <Mail className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">Email</div>
-                    <div className="text-gray-600 dark:text-gray-400">satyajit@example.com</div>
+                    <div className="sketch-subheading font-semibold">Email</div>
+                    <div className="sketch-text">satyajit@example.com</div>
                   </div>
                 </motion.a>
 
                 <motion.a
                   href="https://linkedin.com/in/satyajit"
-                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
-                  whileHover={{ scale: 1.02 }}
+                  className="sketch-card flex items-center space-x-4 p-4"
+                  whileHover={{ scale: 1.02, rotate: -1 }}
                 >
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                    <Linkedin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <div className="w-12 h-12 bg-magenta-400 flex items-center justify-center">
+                    <Linkedin className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">LinkedIn</div>
-                    <div className="text-gray-600 dark:text-gray-400">linkedin.com/in/satyajit</div>
+                    <div className="sketch-subheading font-semibold">LinkedIn</div>
+                    <div className="sketch-text">linkedin.com/in/satyajit</div>
                   </div>
                 </motion.a>
 
                 <motion.a
                   href="https://github.com/satyajit"
-                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
-                  whileHover={{ scale: 1.02 }}
+                  className="sketch-card flex items-center space-x-4 p-4"
+                  whileHover={{ scale: 1.02, rotate: 1 }}
                 >
-                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                    <Github className="w-6 h-6 text-gray-900 dark:text-white" />
+                  <div className="w-12 h-12 bg-yellow-400 flex items-center justify-center">
+                    <Github className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">GitHub</div>
-                    <div className="text-gray-600 dark:text-gray-400">github.com/satyajit</div>
+                    <div className="sketch-subheading font-semibold">GitHub</div>
+                    <div className="sketch-text">github.com/satyajit</div>
                   </div>
                 </motion.a>
               </div>
@@ -1130,13 +1111,13 @@ export default function Home() {
 
             {/* Contact Form */}
             <motion.div
-              className="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700"
+              className="sketch-card p-8"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
           
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Send a message</h3>
+              <h3 className="sketch-subheading text-xl mb-6">Send a message</h3>
               
               <motion.form 
                 onSubmit={handleFormSubmit} 
@@ -1197,153 +1178,11 @@ export default function Home() {
                 </motion.button>
               </motion.form>
             </motion.div>
-          </div>
+            </div>
         </div>
       </section>
 
 
-      {/* Japan Dream Map Section */}
-      <section 
-        id="japan-dream" 
-        className="py-32 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 transition-colors duration-300 relative overflow-hidden"
-        data-testid="japan-dream-section"
-      >
-        {/* Background Elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-20 w-16 h-16 bg-pink-500 rounded-full animate-pulse"></div>
-          <div className="absolute top-32 right-32 w-12 h-12 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-20 left-1/3 w-20 h-20 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              🇯🇵 Japan Dream Map
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              My journey to Japan - hover over the landmarks to explore my dreams
-            </p>
-          </motion.div>
-          
-          {/* Interactive Map */}
-          <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
-            <div className="relative h-96 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl overflow-hidden">
-              {/* Mount Fuji */}
-              <motion.div
-                className="absolute bottom-0 right-1/4 w-32 h-32 bg-gradient-to-t from-gray-400 to-white dark:from-gray-600 dark:to-gray-300 rounded-t-full"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-2xl">🗻</div>
-              </motion.div>
-              
-              {/* Tokyo Skyline */}
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-600 to-gray-400 dark:from-gray-700 dark:to-gray-500">
-                <div className="flex justify-between items-end h-full px-4">
-                  {[...Array(8)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="bg-gray-500 dark:bg-gray-400 rounded-t"
-                      style={{ 
-                        width: '12px', 
-                        height: `${60 + Math.random() * 40}px` 
-                      }}
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  ))}
-                </div>
-              </div>
-              
-              {/* Cherry Blossoms */}
-              <motion.div
-                className="absolute top-10 left-1/3 w-8 h-8 text-pink-400"
-                animate={{ 
-                  y: [0, -10, 0],
-                  rotate: [0, 5, 0]
-                }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-              >
-                🌸
-              </motion.div>
-              
-              {/* Bullet Train */}
-              <motion.div
-                className="absolute top-1/2 left-0 w-16 h-8 bg-red-500 rounded-lg flex items-center justify-center text-white text-xs font-bold"
-                animate={{ x: [0, 400, 0] }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity, 
-                  ease: "linear" 
-                }}
-              >
-                🚄
-              </motion.div>
-              
-              {/* Interactive Tooltips */}
-              <motion.div
-                className="absolute top-20 left-1/4 bg-white dark:bg-gray-700 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                whileHover={{ scale: 1.05 }}
-              >
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>Mount Fuji:</strong> Climb Japan's iconic mountain
-                </p>
-              </motion.div>
-              
-              <motion.div
-                className="absolute top-32 right-1/4 bg-white dark:bg-gray-700 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                whileHover={{ scale: 1.05 }}
-              >
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>Tokyo:</strong> Experience cutting-edge technology
-                </p>
-              </motion.div>
-            </div>
-            
-            {/* Goals List */}
-            <div className="mt-8 grid md:grid-cols-3 gap-6">
-              <motion.div
-                className="text-center p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="text-2xl mb-2">🎓</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">Study in Japan</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Master AI at top universities</p>
-              </motion.div>
-              
-              <motion.div
-                className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="text-2xl mb-2">🏢</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">Work in Tech</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Join innovative companies</p>
-              </motion.div>
-              
-              <motion.div
-                className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="text-2xl mb-2">🌏</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white">Cultural Immersion</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Experience Japanese culture</p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Guestbook Section */}
       <div 
@@ -1353,23 +1192,23 @@ export default function Home() {
         <Guestbook />
       </div>
 
-      {/* Footer */}
-      <footer className="py-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-300" data-testid="footer">
+      {/* Sketchy Footer */}
+      <footer className="py-8 border-t-4 border-black paper-texture transition-colors duration-300" data-testid="footer">
         <div className="max-w-6xl mx-auto px-4 text-center">
           
-          <p className="font-clean text-sm text-gray-600">
+          <p className="sketch-text text-sm">
             © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.
           </p>
           
           {/* Dynamic Quote */}
           {dynamicQuote && (
             <motion.div 
-              className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border-l-4 border-blue-500"
+              className="mt-6 p-4 sketch-card"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <p className="text-sm italic text-gray-700 dark:text-gray-300">
+              <p className="sketch-text text-sm italic">
                 "{dynamicQuote}"
               </p>
             </motion.div>
