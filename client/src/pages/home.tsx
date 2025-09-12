@@ -20,6 +20,9 @@ export default function Home() {
   // New state for enhanced features
   const [showLoading, setShowLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState('home');
+  const [sectionTransition, setSectionTransition] = useState(false);
+  const [dynamicQuote, setDynamicQuote] = useState('');
+  const [completedGoals, setCompletedGoals] = useState(new Set());
 
 
   const hobbies = [
@@ -33,6 +36,44 @@ export default function Home() {
     "Cooking Expert 👨‍🍳"
   ];
 
+  // Dynamic quotes for motivation
+  const quotes = [
+    "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+    "Code is like humor. When you have to explain it, it's bad. - Cory House",
+    "The best way to predict the future is to create it. - Peter Drucker",
+    "Innovation distinguishes between a leader and a follower. - Steve Jobs",
+    "The only way to do great work is to love what you do. - Steve Jobs",
+    "Technology is nothing. What's important is that you have faith in people. - Steve Jobs",
+    "The computer was born to solve problems that did not exist before. - Bill Gates",
+    "Design is not just what it looks like and feels like. Design is how it works. - Steve Jobs",
+    "Stay hungry, stay foolish. - Steve Jobs",
+    "Dream big and dare to fail. - Norman Vaughan",
+    "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+    "The way to get started is to quit talking and begin doing. - Walt Disney"
+  ];
+
+  // Interactive goals data
+  const goals = [
+    { id: 'japan', text: 'Visit Japan and experience the culture', completed: false },
+    { id: 'ai', text: 'Build an AI-powered application', completed: true },
+    { id: 'osint', text: 'Master advanced OSINT techniques', completed: false },
+    { id: 'startup', text: 'Launch my own tech startup', completed: false },
+    { id: 'mentor', text: 'Mentor aspiring developers', completed: true },
+    { id: 'speak', text: 'Speak at a tech conference', completed: false }
+  ];
+
+  const toggleGoal = (goalId: string) => {
+    setCompletedGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(goalId)) {
+        newSet.delete(goalId);
+      } else {
+        newSet.add(goalId);
+      }
+      return newSet;
+    });
+  };
+
   const typewriterTexts = [
     "Coder",
     "OSINT Enthusiast", 
@@ -41,6 +82,9 @@ export default function Home() {
   ];
 
   useEffect(() => {
+    // Set random quote on load
+    setDynamicQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    
     // Fallback: hide loading screen after 10 seconds
     const fallbackTimer = setTimeout(() => {
       setShowLoading(false);
@@ -95,14 +139,16 @@ export default function Home() {
       setScrollProgress(progress);
       setShowScrollTop(scrolled > 500);
       
-      // Section unlocking based on scroll position
+      // Section unlocking based on scroll position with transitions
       const sections = [
+        { id: 'home', element: document.getElementById('home') },
         { id: 'about', element: document.getElementById('about') },
         { id: 'achievements', element: document.getElementById('achievements') },
         { id: 'projects', element: document.getElementById('projects') },
-        { id: 'contact', element: document.getElementById('contact') },
         { id: 'skills', element: document.getElementById('skills') },
-        { id: 'guestbook', element: document.getElementById('guestbook') }
+        { id: 'japan-dream', element: document.getElementById('japan-dream') },
+        { id: 'guestbook', element: document.getElementById('guestbook') },
+        { id: 'contact', element: document.getElementById('contact') }
       ];
 
       sections.forEach(({ id, element }) => {
@@ -110,8 +156,13 @@ export default function Home() {
           const rect = element.getBoundingClientRect();
           const isVisible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
           
-          if (isVisible) {
-            setCurrentSection(id);
+          if (isVisible && currentSection !== id) {
+            // Trigger section transition
+            setSectionTransition(true);
+            setTimeout(() => {
+              setCurrentSection(id);
+              setSectionTransition(false);
+            }, 300);
           }
         }
       });
@@ -279,6 +330,19 @@ export default function Home() {
         transition={{ duration: 0.1 }}
       />
 
+      {/* Section Transition Overlay */}
+      <AnimatePresence>
+        {sectionTransition && (
+          <motion.div
+            className="fixed inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 z-40 pointer-events-none"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.2 }}
+            transition={{ duration: 0.3 }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Enhanced Scroll to Top Button */}
       {showScrollTop && (
         <motion.button
@@ -326,6 +390,7 @@ export default function Home() {
                 { href: '#achievements', label: 'Achievements', id: 'achievements' },
                 { href: '#projects', label: 'Projects', id: 'projects' },
                 { href: '#skills', label: 'Skills', id: 'skills' },
+                { href: '#japan-dream', label: 'Japan Dream', id: 'japan-dream' },
                 { href: '#guestbook', label: 'Guestbook', id: 'guestbook' },
                 { href: '#contact', label: 'Contact', id: 'contact' }
               ].map((link, index) => (
@@ -589,10 +654,57 @@ export default function Home() {
             
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Goals</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  My goals are ambitious but crystal clear: excel in academics, study in Japan to immerse myself in cutting-edge technology culture, and become the absolute best in AI programming. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
-              </p>
-            </div>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                  My goals are ambitious but crystal clear. Click on any goal to mark it as completed!
+                </p>
+                
+                {/* Interactive Goals Checklist */}
+                <div className="space-y-3">
+                  {goals.map((goal) => (
+                    <motion.div
+                      key={goal.id}
+                      className={`checklist-item p-3 rounded-lg border-2 transition-all duration-300 ${
+                        completedGoals.has(goal.id) 
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
+                      }`}
+                      onClick={() => toggleGoal(goal.id)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <motion.div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            completedGoals.has(goal.id)
+                              ? 'border-green-500 bg-green-500'
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}
+                          animate={completedGoals.has(goal.id) ? { scale: [1, 1.2, 1] } : {}}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {completedGoals.has(goal.id) && (
+                            <motion.span
+                              className="text-white text-xs"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              ✓
+                            </motion.span>
+                          )}
+                        </motion.div>
+                        <span className={`text-sm font-medium transition-colors duration-300 ${
+                          completedGoals.has(goal.id)
+                            ? 'text-green-600 dark:text-green-400 line-through'
+                            : 'text-gray-700 dark:text-gray-300'
+                        }`}>
+                          {goal.text}
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Interests</h3>
@@ -818,40 +930,84 @@ export default function Home() {
             </p>
           </motion.div>
           
-          {/* Projects Grid */}
+          {/* Projects Grid with 3D Card Flip */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="projects-grid">
             {projects.map((project, index) => (
               <motion.div 
                 key={index} 
-                className="group cursor-pointer"
+                className="group cursor-pointer perspective-1000"
                 data-testid={`project-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:border-gray-300 dark:group-hover:border-gray-600">
-                  <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {project.description}
-                    </p>
+                <div className="relative w-full h-80 preserve-3d group-hover:rotate-y-180 transition-transform duration-700">
+                  {/* Front of Card */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:border-gray-300 dark:group-hover:border-gray-600">
+                    <div className="mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        {project.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {project.tech}
+                      </div>
+                      <motion.div
+                        className="text-blue-600 dark:text-blue-400 font-medium"
+                        whileHover={{ x: 5 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Hover to flip →
+                      </motion.div>
+                    </div>
                   </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {project.tech}
-                </div>
-                    <motion.div
-                      className="text-blue-600 dark:text-blue-400 font-medium"
-                      whileHover={{ x: 5 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      View Project →
-                    </motion.div>
-              </div>
+
+                  {/* Back of Card */}
+                  <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-8 shadow-lg text-white">
+                    <div className="h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-4">{project.title}</h3>
+                        <div className="space-y-3">
+                          <div>
+                            <h4 className="font-semibold mb-2">Tech Stack:</h4>
+                            <p className="text-blue-100 text-sm">{project.tech}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-2">Features:</h4>
+                            <ul className="text-blue-100 text-sm space-y-1">
+                              <li>• Modern UI/UX Design</li>
+                              <li>• Responsive Layout</li>
+                              <li>• Performance Optimized</li>
+                              <li>• Cross-browser Compatible</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-3">
+                        <motion.button
+                          className="px-4 py-2 bg-white/20 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors duration-300"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          View Demo
+                        </motion.button>
+                        <motion.button
+                          className="px-4 py-2 bg-white/20 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors duration-300"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          GitHub
+                        </motion.button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -1054,6 +1210,149 @@ export default function Home() {
       </section>
 
 
+      {/* Japan Dream Map Section */}
+      <section 
+        id="japan-dream" 
+        className="py-32 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 transition-colors duration-300 relative overflow-hidden"
+        data-testid="japan-dream-section"
+      >
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-20 w-16 h-16 bg-pink-500 rounded-full animate-pulse"></div>
+          <div className="absolute top-32 right-32 w-12 h-12 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-1/3 w-20 h-20 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              🇯🇵 Japan Dream Map
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              My journey to Japan - hover over the landmarks to explore my dreams
+            </p>
+          </motion.div>
+          
+          {/* Interactive Map */}
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
+            <div className="relative h-96 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl overflow-hidden">
+              {/* Mount Fuji */}
+              <motion.div
+                className="absolute bottom-0 right-1/4 w-32 h-32 bg-gradient-to-t from-gray-400 to-white dark:from-gray-600 dark:to-gray-300 rounded-t-full"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-2xl">🗻</div>
+              </motion.div>
+              
+              {/* Tokyo Skyline */}
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-600 to-gray-400 dark:from-gray-700 dark:to-gray-500">
+                <div className="flex justify-between items-end h-full px-4">
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="bg-gray-500 dark:bg-gray-400 rounded-t"
+                      style={{ 
+                        width: '12px', 
+                        height: `${60 + Math.random() * 40}px` 
+                      }}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Cherry Blossoms */}
+              <motion.div
+                className="absolute top-10 left-1/3 w-8 h-8 text-pink-400"
+                animate={{ 
+                  y: [0, -10, 0],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+              >
+                🌸
+              </motion.div>
+              
+              {/* Bullet Train */}
+              <motion.div
+                className="absolute top-1/2 left-0 w-16 h-8 bg-red-500 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+                animate={{ x: [0, 400, 0] }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity, 
+                  ease: "linear" 
+                }}
+              >
+                🚄
+              </motion.div>
+              
+              {/* Interactive Tooltips */}
+              <motion.div
+                className="absolute top-20 left-1/4 bg-white dark:bg-gray-700 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <strong>Mount Fuji:</strong> Climb Japan's iconic mountain
+                </p>
+              </motion.div>
+              
+              <motion.div
+                className="absolute top-32 right-1/4 bg-white dark:bg-gray-700 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <strong>Tokyo:</strong> Experience cutting-edge technology
+                </p>
+              </motion.div>
+            </div>
+            
+            {/* Goals List */}
+            <div className="mt-8 grid md:grid-cols-3 gap-6">
+              <motion.div
+                className="text-center p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="text-2xl mb-2">🎓</div>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Study in Japan</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Master AI at top universities</p>
+              </motion.div>
+              
+              <motion.div
+                className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="text-2xl mb-2">🏢</div>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Work in Tech</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Join innovative companies</p>
+              </motion.div>
+              
+              <motion.div
+                className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="text-2xl mb-2">🌏</div>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Cultural Immersion</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Experience Japanese culture</p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Guestbook Section */}
       <div 
         className="scroll-reveal transition-colors duration-300"
@@ -1069,6 +1368,20 @@ export default function Home() {
           <p className="font-clean text-sm text-gray-600">
             © 2024 Satyajit Patil. Handcrafted with passion and endless sketches.
           </p>
+          
+          {/* Dynamic Quote */}
+          {dynamicQuote && (
+            <motion.div 
+              className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border-l-4 border-blue-500"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <p className="text-sm italic text-gray-700 dark:text-gray-300">
+                "{dynamicQuote}"
+              </p>
+            </motion.div>
+          )}
           
           
           <div className="mt-4">
