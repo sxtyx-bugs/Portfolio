@@ -461,179 +461,168 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Desktop Hero Section */}
+      {/* Hero Section - Complete Revamp */}
       <section 
         id="home" 
-        className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-8"
+        className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 transition-colors duration-300"
         data-testid="hero-section"
       >
-        <div className="w-full max-w-6xl">
-          {/* Desktop Window */}
-          <motion.div
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Window Header */}
-            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
-                Portfolio.exe
-              </div>
-              <div className="w-16"></div>
-            </div>
-
-            {/* Window Content */}
-            <div className="p-12">
+        <div className="w-full max-w-7xl mx-auto px-6">
+          {/* Main Content Container */}
+          <div className="relative">
+            {/* Welcome Text with Staggered Animation */}
+            <div className="text-center mb-16">
               <motion.div
-                className="text-center mb-12"
-                initial={{ opacity: 0, y: 20 }}
+                className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white mb-4"
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
+                style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                <h1 className="font-mono text-4xl md:text-6xl font-bold mb-4 text-gray-900 dark:text-white transition-colors duration-300">
-                  welcome to my
-                </h1>
-                <h1 className="font-mono text-4xl md:text-6xl font-bold mb-8 text-gray-900 dark:text-white transition-colors duration-300">
-                  portfolio.
-                </h1>
-                <div className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-mono mb-8">
-                  <span className="inline-block min-h-[2rem]">
-                    {typewriterText}
-                    <span className="animate-pulse">|</span>
-                  </span>
-                </div>
+                welcome to my
               </motion.div>
-
-              {/* Desktop Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* About Card */}
-                <motion.div
-                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 transition-colors duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">About Me</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                    AI Innovator & Developer passionate about building the future. Currently pursuing dreams in Japan 🇯🇵
-                  </p>
-                  <a href="#about" className="text-blue-500 hover:text-blue-600 font-mono text-sm">
-                    Read More →
-                  </a>
-                </motion.div>
-
-                {/* Projects Card */}
-                <motion.div
-                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-green-400 transition-colors duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">Projects</h3>
-                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <div>• LensAI - AI Platform</div>
-                    <div>• Inforvi - Data Viz</div>
-                    <div>• ORLON.OG - OSINT</div>
-                  </div>
-                  <a href="#projects" className="text-green-500 hover:text-green-600 font-mono text-sm">
-                    View All →
-                  </a>
-                </motion.div>
-
-                {/* Resume Card */}
-                <motion.div
-                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-purple-400 transition-colors duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">Resume</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                    Download my latest resume
-                  </p>
-                  <a href="#" className="text-purple-500 hover:text-purple-600 font-mono text-sm">
-                    Resume.pdf ↓
-                  </a>
-                </motion.div>
-              </div>
-
-              {/* To Do List */}
               <motion.div
-                className="mt-12 bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600"
-                initial={{ opacity: 0, y: 20 }}
+                className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white mb-8"
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                <h3 className="font-mono text-lg font-bold mb-4 text-gray-900 dark:text-white">To do:</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-300">
-                  <div>• Land my dream AI job</div>
-                  <div>• Master Japanese language</div>
-                  <div>• Move to Japan</div>
-                  <div>• Build revolutionary AI tools</div>
-                  <div>• Contribute to open source</div>
-                  <div>• Travel the world</div>
-                  <div>• Master OSINT techniques</div>
-                  <div>• Create amazing projects</div>
-                </div>
+                portfolio.
               </motion.div>
             </div>
-          </motion.div>
+
+            {/* Name and Title */}
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                Satyajit Patil's Portfolio
+          </h1>
+              <div className="text-lg text-gray-600 dark:text-gray-400">
+              {typewriterText}
+                <span className="animate-pulse">|</span>
+          </div>
+            </motion.div>
+
+            {/* Action Buttons */}
+            <motion.div
+              className="flex justify-center space-x-6 mb-20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <motion.button
+                className="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Contact
+              </motion.button>
+              <motion.button
+                className="px-8 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 transition-colors duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Resume
+              </motion.button>
+            </motion.div>
+
+            {/* Date Display */}
+            <motion.div
+              className="text-center text-sm text-gray-500 dark:text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+            >
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                month: 'short', 
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+              })}
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* About Section - Enhanced */}
+      {/* About Section - Complete Revamp */}
       <section 
         id="about" 
-        className="py-32 about-section-enhanced bg-gray-50 dark:bg-gray-800/50 fade-in-section scroll-reveal transition-colors duration-300"
+        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
         data-testid="about-section"
       >
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="about-title-enhanced text-center" data-testid="about-title">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" data-testid="about-title">
               About Me
             </h2>
-            <div className="absolute top-8 right-8 text-3xl animate-float opacity-30">📝</div>
-          </div>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Passionate about AI, OSINT, and building the future
+            </p>
+          </motion.div>
           
-          <div className="about-card-enhanced p-12 md:p-16 text-left max-w-4xl mx-auto" data-testid="about-content">
-            <div className="about-paragraph-delay">
-              <p className="about-text-enhanced">
-                I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of <span className="highlight-word">AI and technology</span>. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of <span className="highlight-word">OSINT</span> and geolocation technologies.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              className="space-y-6"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Story</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  I'm a passionate dreamer and builder who thrives on creating innovative solutions at the intersection of AI and technology. My journey spans across multiple domains - from developing AI-powered applications to exploring the fascinating world of OSINT and geolocation technologies.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Goals</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  My goals are ambitious but crystal clear: excel in academics, study in Japan to immerse myself in cutting-edge technology culture, and become the absolute best in AI programming. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">My Interests</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  When I'm not coding, you'll find me exploring the depths of OSINT research, learning about geolocation techniques, or diving into the latest AI papers. I believe that the future belongs to those who can bridge the gap between human creativity and machine intelligence.
+                </p>
+              </div>
+            </motion.div>
             
-            <div className="about-paragraph-delay">
-              <p className="about-text-enhanced">
-                My goals are ambitious but crystal clear: excel in academics, study in <span className="highlight-word">Japan</span> to immerse myself in cutting-edge technology culture, and become the absolute best in <span className="highlight-word">AI programming</span>. Every line of code I write, every algorithm I develop, brings me closer to these dreams.
-              </p>
-            </div>
-            
-            <div className="about-paragraph-delay">
-              <p className="about-text-enhanced">
-                When I'm not coding or experimenting with new AI models, you'll find me diving deep into unique projects, learning Japanese, or exploring the endless possibilities that technology offers. I believe in the power of continuous learning and the magic that happens when <span className="highlight-word">curiosity</span> meets <span className="highlight-word">dedication</span>.
-              </p>
-            </div>
-            
-            <div className="about-paragraph-delay">
-              <p className="about-text-enhanced">
-                Beyond the digital realm, I'm an <span className="highlight-word">intermediate chess player</span> with a 1400 ELO rating, where strategic thinking and pattern recognition sharpen my problem-solving skills. I also had the honor of competing for <span className="highlight-word">Team MGX</span> in Apex Legends Mobile Australian Competitive scene, combining tactical gameplay with team coordination under pressure.
-              </p>
-            </div>
-            
-            <div className="about-paragraph-delay">
-              <p className="about-text-enhanced italic font-semibold text-gray-700 border-l-4 border-gray-300 pl-6 mt-8">
-                "The future belongs to those who believe in the beauty of their dreams, and I'm building mine one algorithm at a time."
-              </p>
-            </div>
+            <motion.div
+              className="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Skills & Technologies</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">AI & Machine Learning</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Web Development</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">OSINT Research</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Data Visualization</div>
+                </div>
+                <div className="space-y-3">
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Python</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">JavaScript/TypeScript</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">React</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Node.js</div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -680,7 +669,7 @@ export default function Home() {
                     </div>
                     <p className="font-clean text-gray-600 dark:text-gray-300">{achievement.detail}</p>
                   </motion.div>
-                </div>
+                  </div>
               </motion.div>
             ))}
           </div>
@@ -775,202 +764,315 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </div>
+              </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Projects - Desktop Style */}
+      {/* Projects Section - Complete Revamp */}
       <section 
         id="projects" 
-        className="py-32 fade-in-section scroll-reveal bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+        className="py-32 bg-white dark:bg-gray-900 transition-colors duration-300"
         data-testid="projects-section"
       >
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Window Header */}
-            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
-                Projects.exe
-              </div>
-              <div className="w-16"></div>
-            </div>
-
-            {/* Window Content */}
-            <div className="p-8">
-              <h2 className="font-mono text-3xl font-bold mb-8 text-gray-900 dark:text-white" data-testid="projects-title">
-                My Projects
-              </h2>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="projects-grid">
-                {projects.map((project, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 transition-colors duration-300"
-                    data-testid={`project-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <h3 className="font-mono text-lg font-bold mb-3 text-gray-900 dark:text-white">{project.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">{project.description}</p>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 font-mono mb-3">{project.tech}</div>
-                    <a href="#" className="text-blue-500 hover:text-blue-600 font-mono text-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="projects-grid">
+            {projects.map((project, index) => (
+              <motion.div 
+                key={index} 
+                className="group cursor-pointer"
+                data-testid={`project-${index}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:border-gray-300 dark:group-hover:border-gray-600">
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {project.description}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {project.tech}
+                </div>
+                    <motion.div
+                      className="text-blue-600 dark:text-blue-400 font-medium"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
                       View Project →
-                    </a>
-                  </motion.div>
-                ))}
+                    </motion.div>
+              </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Resume Section */}
+          <motion.div
+            className="mt-20 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            <div className="inline-flex items-center space-x-4 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300">
+              <div className="w-12 h-12 bg-gray-900 dark:bg-white rounded-lg flex items-center justify-center">
+                <Book className="w-6 h-6 text-white dark:text-gray-900" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Resume.pdf</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Download my latest resume</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* To Do Section */}
+          <motion.div
+            className="mt-20"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6 }}
+          >
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">To do:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.2, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Land my dream AI job</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.3, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Master Japanese language</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.4, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Move to Japan</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.5, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Build revolutionary AI tools</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.6, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Contribute to open source</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.7, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Travel the world</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.8, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Master OSINT techniques</span>
+                </motion.div>
+                <motion.div
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.9, duration: 0.4 }}
+                >
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Create amazing projects</span>
+                </motion.div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Form - Desktop Style */}
+      {/* Contact Section - Complete Revamp */}
       <section 
         id="contact" 
-        className="py-32 bg-gray-100 dark:bg-gray-900 fade-in-section scroll-reveal transition-colors duration-300"
+        className="py-32 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
         data-testid="contact-section"
       >
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-6">
           <motion.div
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-gray-300 dark:border-gray-600 overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Window Header */}
-            <div className="bg-gray-200 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-300 dark:border-gray-600">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
-                Contact.exe
-              </div>
-              <div className="w-16"></div>
-            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4" data-testid="contact-title">
+              Let's Connect
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Ready to work together? Let's make something amazing.
+            </p>
+          </motion.div>
 
-            {/* Window Content */}
-            <div className="p-8">
-              <h2 className="font-mono text-3xl font-bold mb-8 text-gray-900 dark:text-white text-center" data-testid="contact-title">
-                Let's Connect
-              </h2>
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Contact Info */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Get in touch</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  I'm always interested in new opportunities and exciting projects. 
+                  Whether you want to discuss AI, OSINT, or just say hello, I'd love to hear from you.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <motion.a
+                  href="mailto:satyajit@example.com"
+                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900 dark:text-white">Email</div>
+                    <div className="text-gray-600 dark:text-gray-400">satyajit@example.com</div>
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  href="https://linkedin.com/in/satyajit"
+                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <Linkedin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900 dark:text-white">LinkedIn</div>
+                    <div className="text-gray-600 dark:text-gray-400">linkedin.com/in/satyajit</div>
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  href="https://github.com/satyajit"
+                  className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                    <Github className="w-6 h-6 text-gray-900 dark:text-white" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900 dark:text-white">GitHub</div>
+                    <div className="text-gray-600 dark:text-gray-400">github.com/satyajit</div>
+                  </div>
+                </motion.a>
+              </div>
+            </motion.div>
+
+            {/* Contact Form */}
+            <motion.div
+              className="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
           
-          <motion.form 
-            onSubmit={handleFormSubmit} 
-            className="nb-border p-12" 
-            data-testid="contact-form"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="space-y-8">
-              <div>
-                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Name</label>
-                <motion.input
-                  type="text"
-                  value={contactForm.name}
-                  onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
-                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none"
-                  data-testid="contact-name"
-                  whileFocus={{ scale: 1.02 }}
-                />
-              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Send a message</h3>
               
-              <div>
-                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Email</label>
-                <motion.input
-                  type="email"
-                  value={contactForm.email}
-                  onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
-                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none"
-                  data-testid="contact-email"
-                  whileFocus={{ scale: 1.02 }}
-                />
-              </div>
-              
-              <div>
-                <label className="font-handwritten text-xl block mb-3 text-gray-900 dark:text-gray-100">Message</label>
-                <motion.textarea
-                  value={contactForm.message}
-                  onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
-                  rows={5}
-                  className="w-full p-4 nb-border bg-white dark:bg-gray-800 font-clean text-lg text-gray-900 dark:text-gray-100 focus:outline-none resize-none"
-                  data-testid="contact-message"
-                  whileFocus={{ scale: 1.02 }}
-                />
-              </div>
-              
-              <motion.button
-                type="submit"
-                className="w-full nb-button p-4 font-handwritten text-xl flex items-center justify-center space-x-3"
-                data-testid="contact-submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <motion.form 
+                onSubmit={handleFormSubmit} 
+                className="space-y-6" 
+                data-testid="contact-form"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <span>Send Message</span>
-                <Send className="w-5 h-5" />
-              </motion.button>
-            </div>
-          </motion.form>
-          
-          {/* Social Links */}
-          <motion.div 
-            className="flex justify-center space-x-8 mt-12" 
-            data-testid="social-links"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            <motion.a 
-              href="#" 
-              className="social-icon" 
-              data-testid="link-github"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
-                <Github className="w-6 h-6 text-gray-900 dark:text-gray-100" />
-              </div>
-            </motion.a>
-            <motion.a 
-              href="#" 
-              className="social-icon" 
-              data-testid="link-linkedin"
-              whileHover={{ scale: 1.1, rotate: -5 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
-                <Linkedin className="w-6 h-6 text-gray-900 dark:text-gray-100" />
-              </div>
-            </motion.a>
-            <motion.a 
-              href="#" 
-              className="social-icon" 
-              data-testid="link-instagram"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <div className="nb-border w-16 h-16 flex items-center justify-center bg-white dark:bg-gray-800">
-                <Instagram className="w-6 h-6 text-gray-900 dark:text-gray-100" />
-              </div>
-            </motion.a>
-          </motion.div>
-            </div>
-          </motion.div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                  <motion.input
+                    type="text"
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm(prev => ({...prev, name: e.target.value}))}
+                    className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+                    data-testid="contact-name"
+                    whileFocus={{ scale: 1.02 }}
+                    placeholder="Your name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                  <motion.input
+                    type="email"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm(prev => ({...prev, email: e.target.value}))}
+                    className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+                    data-testid="contact-email"
+                    whileFocus={{ scale: 1.02 }}
+                    placeholder="your@email.com"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                  <motion.textarea
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm(prev => ({...prev, message: e.target.value}))}
+                    rows={6}
+                    className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 resize-none"
+                    data-testid="contact-message"
+                    whileFocus={{ scale: 1.02 }}
+                    placeholder="Tell me about your project..."
+                  />
+                </div>
+                
+                <motion.button
+                  type="submit"
+                  className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 px-6 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300 flex items-center justify-center space-x-2"
+                  data-testid="contact-submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span>Send Message</span>
+                  <Send className="w-5 h-5" />
+                </motion.button>
+              </motion.form>
+            </motion.div>
+          </div>
         </div>
       </section>
 
